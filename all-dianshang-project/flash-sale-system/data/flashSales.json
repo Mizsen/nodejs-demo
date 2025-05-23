@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "productId": 1,
+    "price": 9.9,
+    "stock": 0,
+    "startTime": "2024-05-23T10:00:00Z",
+    "endTime": "2099-05-23T12:00:00Z",
+    "participants": [
+      123,
+      456
+    ]
+  }
+]
