@@ -1,4 +1,8 @@
-node_modules
+node_modules/
+
+all-dianshang-project/ecommerce-app/backend/node_modules/
+
+all-dianshang-project/ecommerce-app/frontend/node_modules/
 
 
 
