@@ -1,0 +1,1 @@
+- curl -X POST http://localhost:3003/log -H "Content-Type: application/json" -d '{"message":"Hello, this is a test log"}'
