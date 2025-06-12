@@ -1,0 +1,37 @@
+package com.example.blog.repository;
+
+import com.example.blog.model.Blog;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface BlogRepository extends JpaRepository<Blog, Long> {
+    // Additional query methods can be defined here
+}
+
+import com.example.blog.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+    User findByUsername(String username);
+}
+
+import com.example.blog.model.Comment;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface CommentRepository extends JpaRepository<Comment, Long> {
+    // Additional query methods can be defined here
+}
+
+import com.example.blog.model.Like;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface LikeRepository extends JpaRepository<Like, Long> {
+    // Additional query methods can be defined here
+}

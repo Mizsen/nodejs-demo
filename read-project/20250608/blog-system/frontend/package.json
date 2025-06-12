@@ -1,0 +1,28 @@
+{
+  "name": "blog-system-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for the Blog System application using Vue.js and Element UI.",
+  "scripts": {
+    "serve": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.2.0",
+    "vue-router": "^4.0.0",
+    "vuex": "^4.0.0",
+    "element-plus": "^2.0.0"
+  },
+  "devDependencies": {
+    "vite": "^2.0.0",
+    "@vitejs/plugin-vue": "^1.0.0"
+  },
+  "keywords": [
+    "vue",
+    "element-ui",
+    "blog",
+    "frontend"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

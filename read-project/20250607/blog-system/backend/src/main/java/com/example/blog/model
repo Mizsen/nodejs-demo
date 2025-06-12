@@ -1,0 +1,58 @@
+package com.example.blog.model;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
+
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String username;
+    private String password;
+    private String email;
+
+    @OneToMany(mappedBy = "user")
+    private List<Blog> blogs;
+
+    // Getters and Setters
+}
+
+@Entity
+public class Blog {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String title;
+    private String content;
+    private Date createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "blog")
+    private List<Comment> comments;
+
+    // Getters and Setters
+}
+
+@Entity
+public class Comment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String content;
+    private Date createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "blog_id")
+    private Blog blog;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    // Getters and Setters
+}

@@ -1,10 +1,19 @@
-node_modules/
-all-dianshang-project/ecommerce-app/backend/node_modules/
-all-dianshang-project/ecommerce-app/frontend/node_modules/
-all-dianshang-project/flash-sale-system/node_modules/
-im-project/socket-node-demo/node_modules/
+# Node.js
+/**/node_modules/
+# node_modules/
+# all-dianshang-project/ecommerce-app/backend/node_modules/
+# all-dianshang-project/ecommerce-app/frontend/node_modules/
+# all-dianshang-project/flash-sale-system/node_modules/
+# im-project/socket-node-demo/node_modules/
 
 
+# java
+
+# 忽略所有目录中的 target 文件夹
+/**/target/
+# qiye-project/202506091014/blog-system/backend/target
 
 
-
+/**/logs/
+# 忽略所有目录中的 logs 文件夹
+# qiye-project/202506091014/blog-system/backend/logs

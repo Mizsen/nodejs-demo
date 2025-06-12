@@ -1,0 +1,71 @@
+package com.example.blog.model;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    private String username;
+    private String password;
+    private String email;
+
+    // Getters and Setters
+}
+
+@Entity
+public class Blog {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    private String title;
+    private String content;
+    private LocalDateTime createdAt;
+    
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User author;
+
+    // Getters and Setters
+}
+
+@Entity
+public class Comment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    private String content;
+    private LocalDateTime createdAt;
+    
+    @ManyToOne
+    @JoinColumn(name = "blog_id")
+    private Blog blog;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User author;
+
+    // Getters and Setters
+}
+
+@Entity
+public class Like {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "blog_id")
+    private Blog blog;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    // Getters and Setters
+}

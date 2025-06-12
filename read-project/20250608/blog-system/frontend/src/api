@@ -1,0 +1,60 @@
+// This file contains API service files that handle HTTP requests to the backend for user, blog, comment, and like functionalities. 
+
+import axios from 'axios';
+
+const API_URL = 'http://localhost:8080/api'; // Adjust the URL as needed
+
+// User API
+export const userApi = {
+    register(userData) {
+        return axios.post(`${API_URL}/users/register`, userData);
+    },
+    login(credentials) {
+        return axios.post(`${API_URL}/users/login`, credentials);
+    },
+    getUserProfile(userId) {
+        return axios.get(`${API_URL}/users/${userId}`);
+    }
+};
+
+// Blog API
+export const blogApi = {
+    createBlog(blogData) {
+        return axios.post(`${API_URL}/blogs`, blogData);
+    },
+    editBlog(blogId, blogData) {
+        return axios.put(`${API_URL}/blogs/${blogId}`, blogData);
+    },
+    deleteBlog(blogId) {
+        return axios.delete(`${API_URL}/blogs/${blogId}`);
+    },
+    getBlog(blogId) {
+        return axios.get(`${API_URL}/blogs/${blogId}`);
+    },
+    getAllBlogs() {
+        return axios.get(`${API_URL}/blogs`);
+    },
+    searchBlogs(query) {
+        return axios.get(`${API_URL}/blogs/search`, { params: { q: query } });
+    }
+};
+
+// Comment API
+export const commentApi = {
+    addComment(blogId, commentData) {
+        return axios.post(`${API_URL}/blogs/${blogId}/comments`, commentData);
+    },
+    getComments(blogId) {
+        return axios.get(`${API_URL}/blogs/${blogId}/comments`);
+    }
+};
+
+// Like API
+export const likeApi = {
+    likeBlog(blogId) {
+        return axios.post(`${API_URL}/blogs/${blogId}/like`);
+    },
+    unlikeBlog(blogId) {
+        return axios.delete(`${API_URL}/blogs/${blogId}/like`);
+    }
+};
