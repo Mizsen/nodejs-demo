@@ -1,8 +1,11 @@
 <template>
-  <el-avatar :src="src" :size="sizeMap[size]" :style="avatarStyle" />
+  <el-avatar :src="avatarSrc" :size="sizeMap[size]" :style="avatarStyle" />
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { getUserAvatarUrl } from '../api/user'
+
 const props = defineProps({
   src: String,
   size: {
@@ -11,6 +14,19 @@ const props = defineProps({
     validator: v => ['small', 'medium', 'large', '32', '48', '64'].includes(v)
   }
 })
+
+const avatarSrc = computed(() => {
+  if (!props.src) return getUserAvatarUrl('default')
+  // 如果src是完整的文件名（包含.png等后缀），则使用getUserAvatarUrl
+  if (props.src.includes('.')) {
+    // const id = props.src.split('.')[0]
+    return getUserAvatarUrl(props.src)
+  }
+
+  // 否则直接使用src
+  return props.src
+})
+
 const sizeMap = {
   small: 32,
   medium: 48,

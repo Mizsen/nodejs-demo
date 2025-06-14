@@ -3,12 +3,22 @@
     <Navbar />
     <el-card class="profile-card">
       <div class="user-info">
-        <CircleAvatar :src="user.avatar" :size="64" />
+        <AvatarUpload 
+          v-if="isCurrentUser"
+          :user-id="user.id"
+          :initial-avatar-url="user.avatarUrl"
+          @upload-success="handleAvatarUploadSuccess"
+        />
+        <CircleAvatar 
+          v-else
+          :src="user.avatarUrl" 
+          :size="120" 
+        />
         <div class="user-meta">
           <h2>{{ user.nickname }}</h2>
           <div>邮箱：{{ user.email }}</div>
-          <div>注册时间：{{ user.registeredAt }}</div>
-          <div>最后登录：{{ user.lastLogin }}</div>
+          <div>注册时间：{{ user.registerTime }}</div>
+          <div>最后登录：{{ user.lastLoginTime }}</div>
         </div>
       </div>
     </el-card>
@@ -29,25 +39,43 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useUserStore } from '../store/user'
 import Navbar from '../components/Navbar.vue'
 import CircleAvatar from '../components/CircleAvatar.vue'
+import AvatarUpload from '../components/AvatarUpload.vue'
 import PostCard from '../components/PostCard.vue'
 import { getUserProfile } from '../api/user'
 import { getPosts } from '../api/post'
 
 const route = useRoute()
+const userStore = useUserStore()
 const user = ref({})
 const posts = ref([])
 const total = ref(0)
 const page = ref(1)
 const pageSize = 10
 
+// 判断是否是当前登录用户
+const isCurrentUser = computed(() => {
+  return userStore.userInfo && userStore.userInfo.id === parseInt(route.params.id)
+})
+
 const fetchUser = async () => {
   const { data } = await getUserProfile(route.params.id)
   user.value = data
 }
+
+const handleAvatarUploadSuccess = async (newAvatarUrl) => {
+  user.value.avatarUrl = newAvatarUrl
+  // 更新用户store中的头像
+  if (isCurrentUser.value) {
+    // 重新获取用户信息以更新store
+    await userStore.fetchUserInfo()
+  }
+}
+
 const fetchPosts = async () => {
   const { data } = await getPosts(page.value, pageSize, route.params.id)
   posts.value = data.records || data.data || []
@@ -78,8 +106,9 @@ onMounted(() => {
 }
 .user-info {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 24px;
+  padding: 16px;
 }
 .user-meta {
   flex: 1;

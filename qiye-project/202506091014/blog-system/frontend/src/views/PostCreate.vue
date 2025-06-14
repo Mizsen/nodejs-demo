@@ -19,13 +19,25 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../store/user'
 import Navbar from '../components/Navbar.vue'
 import { createPost } from '../api/post'
 
 const router = useRouter()
+const userStore = useUserStore()
 const form = ref({ title: '', content: '' })
+
+onMounted(async () => {
+  if (!userStore.token) {
+    window.$message ? window.$message.warning('请先登录') : alert('请先登录')
+    router.push('/login')
+    return
+  }
+  // 确保用户信息是最新的
+  await userStore.fetchUserInfo()
+})
 
 const onSubmit = async () => {
   if (!form.value.title || !form.value.content) {

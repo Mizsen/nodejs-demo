@@ -11,7 +11,7 @@
         <div class="user-info">
           <p><strong>用户名：</strong>{{ userStore.userInfo.username }}</p>
           <p><strong>邮箱：</strong>{{ userStore.userInfo.email }}</p>
-          <p><strong>注册时间：</strong>{{ new Date(userStore.userInfo.createdAt).toLocaleDateString() }}</p>
+          <p><strong>注册时间：</strong>{{ new Date(userStore.userInfo.registerTime).toLocaleDateString() }}</p>
         </div>
       </el-card>
     </div>
@@ -32,9 +32,14 @@
       :total="total"
       :page-size="pageSize"
       :current-page="page"
-      @current-change="fetchPosts"
+      @current-change="(val) => searchQuery.value ? onSearch(val) : fetchPosts(val)"
       style="margin: 32px auto; text-align: center;"
     />
+
+
+
+
+
   </div>
 </template>
 
@@ -57,14 +62,21 @@ const categories = ref(['技术', '生活', '随笔'])
 const router = useRouter()
 const userStore = useUserStore()
 
-const fetchPosts = async () => {
+const fetchPosts = async (newPage ) => {
+  page.value = newPage || page.value;
   const { data } = await getPosts(page.value, pageSize)
   posts.value = data.records || data.data || []
   total.value = data.total || 0
 }
 
-const onSearch = async () => {
-  const { data } = await searchPosts(searchQuery.value, selectedCategory.value, page.value, pageSize)
+const onSearch = async (newPage) => {
+  page.value = newPage || page.value;
+  const { data } = await searchPosts(
+      searchQuery.value,
+      selectedCategory.value,
+      page.value,
+      pageSize
+  )
   posts.value = data.records || data.data || []
   total.value = data.total || 0
 }

@@ -33,7 +33,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { useUserStore } from '../store/user'
 import Navbar from '../components/Navbar.vue'
 import MarkdownRenderer from '../components/MarkdownRenderer.vue'
 import CommentCard from '../components/CommentCard.vue'
@@ -41,8 +42,11 @@ import CircleAvatar from '../components/CircleAvatar.vue'
 import LikeButton from '../components/LikeButton.vue'
 import { getPost } from '../api/post'
 import { getComments, addComment } from '../api/comment'
+import { ElMessage } from 'element-plus'
 
 const route = useRoute()
+const router = useRouter()
+const userStore = useUserStore()
 const post = ref({})
 const comments = ref([])
 const newComment = ref('')
@@ -56,14 +60,40 @@ const fetchComments = async () => {
   comments.value = data
 }
 const submitComment = async () => {
-  if (newComment.value.length < 5) return
-  await addComment({ postId: route.params.id, content: newComment.value })
-  newComment.value = ''
-  fetchComments()
+  if (newComment.value.length < 5) {
+    ElMessage.warning('评论内容至少需要5个字符')
+    return
+  }
+  
+  if (!userStore.user?.id) {
+    ElMessage.warning('请先登录后再评论')
+    router.push('/login')
+    return
+  }
+
+  try {
+    await addComment({
+      postId: route.params.id,
+      content: newComment.value,
+      author: { id: userStore.user.id }
+    })
+    newComment.value = ''
+    await fetchComments()
+    ElMessage.success('评论发布成功')
+  } catch (error) {
+    ElMessage.error('评论发布失败：' + (error.response?.data || error.message))
+  }
 }
-onMounted(() => {
-  fetchPost()
-  fetchComments()
+onMounted(async () => {
+  try {
+    await Promise.all([
+      fetchPost(),
+      fetchComments(),
+      userStore.fetchUserInfo()
+    ])
+  } catch (error) {
+    console.error('加载数据失败:', error)
+  }
 })
 </script>
 

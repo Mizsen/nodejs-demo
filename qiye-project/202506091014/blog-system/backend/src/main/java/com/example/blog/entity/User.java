@@ -22,6 +22,9 @@ public class User {
     @Column(name = "avatar_url")
     private String avatarUrl;
 
+    @Column(name = "avatar_content_type")
+    private String avatarContentType;
+
     @Column(length = 50)
     private String nickname;
 
@@ -81,6 +84,14 @@ public class User {
         this.avatarUrl = avatarUrl;
     }
 
+    public String getAvatarContentType() {
+        return avatarContentType;
+    }
+
+    public void setAvatarContentType(String avatarContentType) {
+        this.avatarContentType = avatarContentType;
+    }
+
     public String getNickname() {
         return nickname;
     }
@@ -131,6 +142,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", avatarUrl='" + avatarUrl + '\'' +
+                ", avatarContentType='" + avatarContentType + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", registerTime=" + registerTime +
                 ", lastLoginTime=" + lastLoginTime +
