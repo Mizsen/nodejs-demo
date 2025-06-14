@@ -32,7 +32,7 @@
       :total="total"
       :page-size="pageSize"
       :current-page="page"
-      @current-change="(val) => searchQuery.value ? onSearch(val) : fetchPosts(val)"
+      @current-change="handlePageChange"
       style="margin: 32px auto; text-align: center;"
     />
 
@@ -44,13 +44,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useUserStore } from '../store/user'
 import Navbar from '../components/Navbar.vue'
 import SearchBar from '../components/SearchBar.vue'
 import PostCard from '../components/PostCard.vue'
 import { getPosts, searchPosts } from '../api/post'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 
 const posts = ref([])
 const total = ref(0)
@@ -70,20 +71,48 @@ const fetchPosts = async (newPage ) => {
 }
 
 const onSearch = async (newPage) => {
-  page.value = newPage || page.value;
-  const { data } = await searchPosts(
+  try {
+    page.value = newPage || page.value;
+    if (!searchQuery.value && !selectedCategory.value) {
+      await fetchPosts(page.value);
+      return;
+    }
+    
+    const { data } = await searchPosts(
       searchQuery.value,
       selectedCategory.value,
       page.value,
       pageSize
-  )
-  posts.value = data.records || data.data || []
-  total.value = data.total || 0
+    );
+    
+    posts.value = data.records || [];
+    total.value = data.total || 0;
+  } catch (error) {
+    console.error('搜索失败:', error);
+    ElMessage.error('搜索失败：' + error.message);
+  }
 }
 
 const goToCreate = () => {
   router.push('/create')
 }
+
+const handlePageChange = (newPage) => {
+  if (searchQuery.value || selectedCategory.value) {
+    onSearch(newPage)
+  } else {
+    fetchPosts(newPage)
+  }
+}
+
+// 监听分类变化
+watch(selectedCategory, (newValue) => {
+  if (searchQuery.value || newValue) {
+    onSearch(1)
+  } else {
+    fetchPosts(1)
+  }
+})
 
 onMounted(async () => {
   await fetchPosts()

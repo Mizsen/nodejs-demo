@@ -190,4 +190,42 @@ public class PostController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    @GetMapping("/search")
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> searchPosts(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String tag,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        // 添加日志记录，以便于跟踪和调试搜索请求
+        logger.info("Searching posts with keyword: {}, tag: {}, page: {}, size: {}", keyword, tag, page, size);
+        try {
+            Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createTime").descending());
+            Page<Post> postPage;
+            String searchKeyword = (keyword != null && !keyword.trim().isEmpty()) ? keyword.trim() : null;
+            String searchTag = (tag != null && !tag.trim().isEmpty()) ? tag.trim() : null;
+        
+            if (searchKeyword != null || searchTag != null) {
+            // 使用关键字或标签搜索
+            postPage = postRepository.findByKeywordAndTag(searchKeyword, searchTag, pageable);
+            } else {
+                // 如果没有搜索条件，返回所有文章
+                postPage = postRepository.findAll(pageable);
+            }
+            
+            List<PostDTO> postDTOs = postPage.getContent().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+                
+            Map<String, Object> response = new HashMap<>();
+            response.put("records", postDTOs);
+            response.put("total", postPage.getTotalElements());
+            
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            logger.error("Failed to search posts", e);
+            return ResponseEntity.internalServerError().body("搜索失败：" + e.getMessage());
+        }
+    }
 }

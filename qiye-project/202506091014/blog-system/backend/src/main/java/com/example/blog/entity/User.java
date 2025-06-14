@@ -4,7 +4,13 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users",
+    indexes = {
+        @Index(name = "idx_user_username", columnList = "username", unique = true),
+        @Index(name = "idx_user_email", columnList = "email", unique = true),
+        @Index(name = "idx_user_token", columnList = "token")
+    }
+)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -5,6 +5,7 @@ import Register from '../views/Register.vue';
 import PostDetail from '../views/PostDetail.vue';
 import UserProfile from '../views/UserProfile.vue';
 import PostCreate from '../views/PostCreate.vue';
+import PostEdit from '../views/PostEdit.vue';
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
@@ -13,6 +14,7 @@ const routes = [
   { path: '/posts/:id', name: 'PostDetail', component: PostDetail },
   { path: '/users/:id', name: 'UserProfile', component: UserProfile },
   { path: '/create', name: 'PostCreate', component: PostCreate },
+  { path: '/posts/:id/edit', name: 'PostEdit', component: PostEdit },
 ];
 
 const router = createRouter({

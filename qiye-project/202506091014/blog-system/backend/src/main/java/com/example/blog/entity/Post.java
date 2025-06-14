@@ -5,7 +5,12 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "posts")
+@Table(name = "posts", indexes = {
+    @Index(name = "idx_post_author", columnList = "user_id"),
+    @Index(name = "idx_post_create_time", columnList = "create_time"),
+    @Index(name = "idx_post_tags", columnList = "tags"),
+    @Index(name = "idx_post_title", columnList = "title")
+})
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +37,9 @@ public class Post {
 
     @Column(name = "like_count")
     private Long likeCount = 0L;
+
+    @Column(length = 500)
+    private String tags;
 
     // Getters and setters omitted for brevity
 
@@ -97,5 +105,13 @@ public class Post {
 
     public void setLikeCount(Long likeCount) {
         this.likeCount = likeCount;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 }

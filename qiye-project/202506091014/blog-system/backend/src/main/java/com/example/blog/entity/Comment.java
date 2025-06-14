@@ -1,20 +1,23 @@
 package com.example.blog.entity;
 
-// import jakarta.persistence.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "comments")
+@Table(name = "comments", indexes = {
+    @Index(name = "idx_comment_post", columnList = "post_id"),
+    @Index(name = "idx_comment_user", columnList = "user_id"),
+    @Index(name = "idx_comment_create_time", columnList = "create_time"),
+    @Index(name = "idx_comment_parent", columnList = "parent_id")
+})
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Lob
-    @Column(nullable = false)
-    private String content;
-
+    private Long id;    
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String content;    
     @Column(name = "create_time")
     private LocalDateTime createTime;
 
@@ -25,6 +28,13 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Comment parentComment;
+
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
+    private List<Comment> replies;
 
     // Getters and setters omitted for brevity
 
@@ -66,5 +76,34 @@ public class Comment {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    public Comment getParentComment() {
+        return parentComment;
+    }
+
+    public void setParentComment(Comment parentComment) {
+        this.parentComment = parentComment;
+    }
+
+    public List<Comment> getReplies() {
+        if (replies == null) {
+            replies = new ArrayList<>();
+        }
+        return replies;
+    }
+
+    public void setReplies(List<Comment> replies) {
+        this.replies = replies;
+    }
+
+    public void addReply(Comment reply) {
+        getReplies().add(reply);
+        reply.setParentComment(this);
+    }
+
+    public void removeReply(Comment reply) {
+        getReplies().remove(reply);
+        reply.setParentComment(null);
     }
 }

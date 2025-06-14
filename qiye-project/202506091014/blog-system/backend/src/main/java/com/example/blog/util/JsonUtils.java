@@ -27,6 +27,7 @@ public class JsonUtils {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL); // 不序列化 null 值
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // 忽略未知属性
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false); // 日期格式化
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false); // 允许序列化空对象
         objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")); // 设置日期格式
         objectMapper.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai")); // 设置时区
         objectMapper.registerModule(new JavaTimeModule()); // 注册 Java 8 时间模块
