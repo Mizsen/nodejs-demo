@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.*;
 import java.util.stream.Collectors;
 import com.example.blog.util.JsonUtils;
-
+import org.springframework.stereotype.Controller;
 
 
 @RestController

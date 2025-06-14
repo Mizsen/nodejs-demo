@@ -19,6 +19,7 @@
           <div>邮箱：{{ user.email }}</div>
           <div>注册时间：{{ user.registerTime }}</div>
           <div>最后登录：{{ user.lastLoginTime }}</div>
+          <div v-if="user.loginIp">登录IP：{{ user.loginIp }}</div>
         </div>
       </div>
     </el-card>

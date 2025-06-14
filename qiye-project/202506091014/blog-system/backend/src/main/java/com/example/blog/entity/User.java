@@ -48,6 +48,10 @@ public class User {
     @Column(name = "token_expiration")
     private LocalDateTime tokenExpiration;
 
+    // 新增字段：存储登录 IP
+    @Column(name = "login_ip", length = 64)
+    private String loginIp;
+
     // Getters and setters
 
     public Long getId() {
@@ -140,6 +144,15 @@ public class User {
         this.tokenExpiration = tokenExpiration;
     }
 
+    // 新增方法：获取和设置 登录 IP
+    public String getLoginIp() {
+        return loginIp;
+    }
+
+    public void setLoginIp(String loginIp) {
+        this.loginIp = loginIp;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -152,6 +165,7 @@ public class User {
                 ", nickname='" + nickname + '\'' +
                 ", registerTime=" + registerTime +
                 ", lastLoginTime=" + lastLoginTime +
+                ", loginIp='" + loginIp + '\'' +
                 ", token='" + token + '\'' +
                 ", tokenExpiration=" + tokenExpiration +
                 '}';

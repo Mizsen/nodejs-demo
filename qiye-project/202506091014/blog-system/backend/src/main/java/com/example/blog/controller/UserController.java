@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,6 +24,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.time.LocalDateTime;
+import com.example.blog.util.CryptoUtil;
 
 @RestController
 @RequestMapping("/api/users")
@@ -32,6 +34,7 @@ public class UserController {
     private static final int MAX_AVATAR_SIZE = 1024 * 1024; // 1MB
     // @Value("${jwt.secret}")
     // private String SECRET_KEY;
+    private String aesKey = "1234567890abcdef";
 
     private final String uploadDir;
 
@@ -47,7 +50,7 @@ public class UserController {
     // private JwtUtil jwtUtil;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
+    public ResponseEntity<?> registerUser(@RequestBody User user, HttpServletRequest request) {
         logger.info("Register request: {}", user);
         if (userRepository.existsByUsername(user.getUsername())) {
             logger.warn("Register failed: username {} already taken", user.getUsername());
@@ -57,31 +60,41 @@ public class UserController {
             logger.warn("Register failed: email {} already in use", user.getEmail());
             return ResponseEntity.badRequest().body("Email is already in use");
         }
-        // Password encryption and other validations should be added here
+        // 密码加密存储（AES+MD5）
+       // 生产环境请用更安全的密钥
+        String encrypted = CryptoUtil.encryptAES(user.getPassword(), aesKey);
+        String encryptedMd5 = CryptoUtil.md5(encrypted);
+        user.setPassword(encryptedMd5);
         user.setRegisterTime(java.time.LocalDateTime.now());
+        user.setLoginIp(request.getRemoteAddr());
         userRepository.save(user);
         logger.info("User registered successfully: {}", user.getUsername());
         return ResponseEntity.ok("User registered successfully");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody User user) {
+    public ResponseEntity<?> loginUser(@RequestBody User user, HttpServletRequest request) {
         logger.info("Login request: {}", user.getUsername());
         Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
         if (existingUser.isEmpty()) {
             logger.warn("Login failed: account {} does not exist", user.getUsername());
             return ResponseEntity.badRequest().body("Account does not exist");
         }
-        // Password check and JWT token generation should be added here
-        if (!existingUser.get().getPassword().equals(user.getPassword())) {
+        // 密码校验（AES+MD5）
+       
+        String encrypted = CryptoUtil.encryptAES(user.getPassword(), aesKey);
+        String encryptedMd5 = CryptoUtil.md5(encrypted);
+        if (!existingUser.get().getPassword().equals(encryptedMd5)) {
             logger.warn("Login failed: incorrect password for user {}", user.getUsername());
             return ResponseEntity.badRequest().body("Incorrect password");
         }
-      // 生成 token 和过期时间
+        // 生成 token 和过期时间
         String token = UUID.randomUUID().toString() + "-" + user.getUsername();
-        LocalDateTime expiration = LocalDateTime.now().plusHours(24); // 例如，设置 token 有效期为 24 小时
+        LocalDateTime expiration = LocalDateTime.now().plusHours(24);
         existingUser.get().setToken(token);
         existingUser.get().setTokenExpiration(expiration);
+        existingUser.get().setLastLoginTime(LocalDateTime.now());
+        existingUser.get().setLoginIp(request.getRemoteAddr());
         userRepository.save(existingUser.get());
         logger.info("Login successful: {}", user.getUsername());
         return ResponseEntity.ok(Map.of("token", token, "msg", user.toString()));
