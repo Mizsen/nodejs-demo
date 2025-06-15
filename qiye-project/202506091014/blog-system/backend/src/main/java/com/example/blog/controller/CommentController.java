@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.util.*;
 import java.util.stream.Collectors;
+
 import com.example.blog.util.JsonUtils;
 import org.springframework.stereotype.Controller;
 
@@ -39,12 +41,12 @@ public class CommentController {
         dto.setId(comment.getId());
         dto.setContent(comment.getContent());
         dto.setCreateTime(comment.getCreateTime());
-        
+
         User author = comment.getAuthor();
         dto.setAuthorId(author.getId());
         dto.setAuthorName(author.getNickname() != null ? author.getNickname() : author.getUsername());
         dto.setAuthorAvatar(author.getAvatarUrl());
-        
+
         Post post = comment.getPost();
         dto.setPostId(post.getId());
         dto.setPostTitle(post.getTitle());
@@ -62,11 +64,11 @@ public class CommentController {
 
         // 获取回复列表
         List<CommentDTO> replies = comment.getReplies()
-            .stream()
-            .map(this::convertToDTO)
-            .collect(Collectors.toList());
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
         dto.setReplies(replies);
-        
+
         return dto;
     }
 
@@ -115,28 +117,32 @@ public class CommentController {
         comment.setAuthor(author);
         comment.setPost(post);
         comment.setCreateTime(java.time.LocalDateTime.now());
-        
+
         Comment savedComment = commentRepository.save(comment);
         logger.info("Comment saved successfully with id: {}", savedComment.getId());
-        
+
         return ResponseEntity.ok(convertToDTO(savedComment));
-    }    
-    
+    }
+
     @GetMapping("/post/{postId}")
     @Transactional(readOnly = true)
     public ResponseEntity<?> getCommentsByPost(@PathVariable Long postId) {
+
+        logger.info("getCommentsByPost:{}", postId);
         try {
             // 检查文章是否存在
             if (!postRepository.existsById(postId)) {
                 return ResponseEntity.badRequest().body("文章不存在");
             }
-            
+
             // 只获取顶级评论（没有父评论的评论）
             List<Comment> comments = commentRepository.findByPostIdAndParentCommentIsNull(postId);
             List<CommentDTO> dtos = comments.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-            
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+
+            logger.info("getCommentsByPost:{},{}", postId,JsonUtils.toJson(dtos));
+
             return ResponseEntity.ok(dtos);
         } catch (Exception e) {
             logger.error("Error getting comments for post: {}", postId, e);

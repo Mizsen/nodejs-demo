@@ -1,37 +1,37 @@
 <template>
   <div class="post-detail-page">
-    <Navbar />
+    <Navbar/>
     <div class="post-header">
       <el-button @click="$router.back()" icon="el-icon-arrow-left">返回</el-button>
       <el-button icon="el-icon-share">分享</el-button>
     </div>
     <h1 class="post-title">{{ post.title }}</h1>
     <div class="post-meta">
-      <CircleAvatar :src="post.authorAvatar" :size="32" />
+      <CircleAvatar :src="post.authorAvatar" :size="32"/>
       <span class="author">{{ post.authorName }}</span>
       <span class="date">{{ post.createTime }}</span>
       <el-tag v-for="tag in post.tags" :key="tag">{{ tag }}</el-tag>
     </div>
-    <MarkdownRenderer :content="post.content" />
+    <MarkdownRenderer :content="post.content"/>
     <div class="post-actions">
-      <LikeButton :post-id="post.id" :liked="post.liked" :count="post.likeCount" />
+      <LikeButton :post-id="post.id" :liked="post.liked" :count="post.likeCount"/>
       <el-button icon="el-icon-chat-dot-round">评论</el-button>
     </div>
     <div class="comment-section">
-      <CommentCard 
-        v-for="comment in comments" 
-        :key="comment.id" 
-        :comment="comment"
-        :can-delete="userStore.userInfo?.id === comment.authorId"
-        @reply="handleReply"
-        @delete="handleDeleteComment"
+      <CommentCard
+          v-for="comment in comments"
+          :key="comment.id"
+          :comment="comment"
+          :can-delete="userStore.userInfo?.id === comment.authorId"
+          @reply="handleReply"
+          @delete="handleDeleteComment"
       />
       <el-input
-        v-model="newComment"
-        type="textarea"
-        placeholder="发表评论..."
-        rows="3"
-        style="margin: 16px 0;"
+          v-model="newComment"
+          type="textarea"
+          placeholder="发表评论..."
+          rows="3"
+          style="margin: 16px 0;"
       />
       <el-button type="primary" @click="submitComment">发表评论</el-button>
     </div>
@@ -39,17 +39,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useUserStore } from '../store/user'
+import {ref, onMounted} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
+import {useUserStore} from '../store/user'
 import Navbar from '../components/Navbar.vue'
 import MarkdownRenderer from '../components/MarkdownRenderer.vue'
 import CommentCard from '../components/CommentCard.vue'
 import CircleAvatar from '../components/CircleAvatar.vue'
 import LikeButton from '../components/LikeButton.vue'
-import { getPost } from '../api/post'
-import { getComments, addComment, deleteComment } from '../api/comment'
-import { ElMessage } from 'element-plus'
+import {getPost} from '../api/post'
+import {getComments, addComment, deleteComment} from '../api/comment'
+import {ElMessage} from 'element-plus'
 
 const route = useRoute()
 const router = useRouter()
@@ -59,13 +59,25 @@ const comments = ref([])
 const newComment = ref('')
 
 const fetchPost = async () => {
-  const { data } = await getPost(route.params.id)
+  const {data} = await getPost(route.params.id)
   post.value = data
 }
 
 const fetchComments = async () => {
-  const { data } = await getComments(route.params.id)
-  comments.value = data
+
+  try {
+    const response = await getComments(route.params.id)
+    if (response && response.data) {
+      // console.log('格式化数据:', JSON.stringify(response.data, null, 2))
+      comments.value = response.data
+    } else {
+      console.warn('返回数据格式异常:', response)
+      comments.value = []
+    }
+  } catch (error) {
+    console.error('获取评论失败:', error)
+    comments.value = []
+  }
 }
 
 const submitComment = async () => {
@@ -73,7 +85,7 @@ const submitComment = async () => {
     ElMessage.warning('评论内容至少需要5个字符')
     return
   }
-  
+
   if (!userStore.userInfo?.id) {
     ElMessage.warning('请先登录后再评论')
     router.push('/login')
@@ -82,9 +94,9 @@ const submitComment = async () => {
 
   try {
     await addComment({
-      post: { id: parseInt(route.params.id) },
+      post: {id: parseInt(route.params.id)},
       content: newComment.value,
-      author: { id: userStore.userInfo.id }
+      author: {id: userStore.userInfo.id}
     })
     newComment.value = ''
     await fetchComments()
@@ -94,7 +106,7 @@ const submitComment = async () => {
   }
 }
 
-const handleReply = async ({ parentComment, content }) => {
+const handleReply = async ({parentComment, content}) => {
   if (!userStore.userInfo?.id) {
     ElMessage.warning('请先登录后再回复')
     router.push('/login')
@@ -103,9 +115,9 @@ const handleReply = async ({ parentComment, content }) => {
 
   try {
     await addComment({
-      post: { id: parseInt(route.params.id) },
+      post: {id: parseInt(route.params.id)},
       content: content,
-      author: { id: userStore.userInfo.id },
+      author: {id: userStore.userInfo.id},
       replyTo: {
         id: parentComment.authorId,
         name: parentComment.authorName,
@@ -149,26 +161,31 @@ onMounted(async () => {
   color: #fff;
   padding-bottom: 40px;
 }
+
 .post-header {
   display: flex;
   gap: 12px;
   margin: 16px 0;
 }
+
 .post-title {
   font-size: 2.2rem;
   margin: 16px 0 8px 0;
 }
+
 .post-meta {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 24px;
 }
+
 .post-actions {
   display: flex;
   gap: 16px;
   margin: 24px 0;
 }
+
 .comment-section {
   margin-top: 32px;
 }
