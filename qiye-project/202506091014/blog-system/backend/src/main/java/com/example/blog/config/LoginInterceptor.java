@@ -12,8 +12,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
+
+    private static final Logger log = LogManager.getLogger(LoginInterceptor.class);
+
     @Autowired
     private UserRepository userRepository;
 
@@ -21,13 +28,16 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("Authorization");
         if (token == null || !token.startsWith("Bearer ")) {
+            log.warn("Authorization token is missing or invalid");
             response.sendRedirect("/");
             return false;
         }
         token = token.substring(7);
         Optional<User> userOpt = userRepository.findByToken(token);
         if (userOpt.isEmpty() || userOpt.get().getTokenExpiration() == null || userOpt.get().getTokenExpiration().isBefore(LocalDateTime.now())) {
-            response.sendRedirect("/");
+            // token无效或过期，重定向到登录页
+            log.warn("User token is invalid or expired");
+            response.sendRedirect("/login");
             return false;
         }
         // 更新最后登录时间和IP
@@ -35,6 +45,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         user.setLastLoginTime(LocalDateTime.now());
         user.setLoginIp(request.getRemoteAddr());
         userRepository.save(user);
+        log.info("User {} logged in successfully from IP {}", user.getId(), user.getLoginIp());
         return true;
     }
 }
