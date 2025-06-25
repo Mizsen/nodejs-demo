@@ -3,6 +3,7 @@
     <Navbar />
     <el-card class="login-card">
       <h2>登录</h2>
+      <el-alert v-if="errorMsg" :title="errorMsg" type="error" show-icon style="margin-bottom: 16px;" @close="errorMsg = ''" />
       <el-form :model="form" @submit.prevent="onLogin">
         <el-form-item label="用户名">
           <el-input v-model="form.username" />
@@ -31,19 +32,41 @@ import { login } from '../api/user'
 const router = useRouter()
 const userStore = useUserStore()
 const form = ref({ username: '', password: '' })
+const errorMsg = ref('')
 
 const onLogin = async () => {
   if (!form.value.username || !form.value.password) {
-    window.$message ? window.$message.error('用户名和密码不能为空') : alert('用户名和密码不能为空')
+    errorMsg.value = '用户名和密码不能为空'
     return
   }
-  const res = await login(form.value)
-  if (res.data && res.data.token) {
-    userStore.setToken(res.data.token)
-    await userStore.fetchUserInfo() // 调用获取用户信息的方法
-    router.push('/')
-  } else {
-    window.$message ? window.$message.error('登录失败') : alert('登录失败')
+  try {
+    const res = await login(form.value)
+    if (res.data && res.data.token) {
+      userStore.setToken(res.data.token)
+      await userStore.fetchUserInfo()
+      router.push('/')
+    } else {
+      let msg = ''
+      if (typeof res.data === 'string') {
+        msg = res.data
+      } else if (res.data && res.data.msg) {
+        msg = res.data.msg
+      } else {
+        msg = '登录失败'
+      }
+      errorMsg.value = msg
+    }
+  } catch (err) {
+    // 处理400等错误
+    let msg = ''
+    if (err.response && typeof err.response.data === 'string') {
+      msg = err.response.data
+    } else if (err.response && err.response.data && err.response.data.msg) {
+      msg = err.response.data.msg
+    } else {
+      msg = '登录失败'
+    }
+    errorMsg.value = msg
   }
 }
 </script>
