@@ -54,7 +54,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
-           
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
@@ -119,7 +119,7 @@
                     <source>21</source>
                     <target>21</target>
                     <!-- 启用注解处理 -->
-                    <compilerArgument>-proc:only</compilerArgument>
+<!--                    <compilerArgument>-proc:only</compilerArgument>-->
                     <annotationProcessorPaths>
                         <annotationProcessorPath>
                             <groupId>org.projectlombok</groupId>

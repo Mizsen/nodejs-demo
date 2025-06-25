@@ -17,7 +17,7 @@ The Prescription Management System is designed to provide a comprehensive soluti
 ## Getting Started
 
 ### Prerequisites
-- Java 11
+- Java 21  springboot3
 - Maven
 
 ### Installation
