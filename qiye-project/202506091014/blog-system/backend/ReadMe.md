@@ -51,3 +51,9 @@
    ```bash
    mvn clean install
    mvn spring-boot:run
+
+
+
+jpackage --type app-image --name myapp --input target
+--main-jar T:\project\GithubProjects\nodejs-demo\qiye-project\202506091014\blog-system\backend\target\blog-1.0.0.jar --win-console --dest dist
+
