@@ -28,6 +28,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+         <!-- JDBC -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-jdbc</artifactId>
+    </dependency>
+    
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -47,13 +54,13 @@
         <!-- 动态数据源 -->
 
 
-        <dependency>
+        <!-- <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-<!--            <version>4.3.0</version>-->
-<!--            <version>3.6.1</version>-->
+           <version>4.3.0</version>
+           <version>3.6.1</version>
             <version>5.0.0</version>
-        </dependency>
+        </dependency> -->
 
 
         <!-- MyBatis Plus -->
@@ -106,7 +113,7 @@
             <version>1.18.30</version>
             <optional>true</optional>
         </dependency> -->
-       <!-- <dependency>
+        <!-- <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-core</artifactId>
             <version>2.3.0</version>
@@ -116,7 +123,7 @@
             <artifactId>jaxb-impl</artifactId>
             <version>2.3.0</version>
         </dependency>-->
-
+        <!-- JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -146,6 +153,26 @@
             <version>2.5.0</version>
         </dependency> -->
 
+
+
+        <!-- AOP 支持 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <!-- Spring Boot 已经默认使用 AspectJ 做 AOP，但如果你手动编写 @Aspect 切面，最好显式引入 -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.9.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.7</version>
+        </dependency>
 
     </dependencies>
 

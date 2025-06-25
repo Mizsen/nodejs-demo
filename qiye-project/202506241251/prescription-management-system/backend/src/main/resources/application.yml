@@ -1,14 +1,11 @@
 spring:
   datasource:
-    dynamic:
-      primary: primary
-      datasource:
-        primary:
-          url: jdbc:sqlite:prescription_write.db
-          driver-class-name: org.sqlite.JDBC
-        slave:
-          url: jdbc:sqlite:prescription_read.db
-          driver-class-name: org.sqlite.JDBC
+    primary:
+      url: jdbc:sqlite:prescription_write.db
+      driver-class-name: org.sqlite.JDBC
+    slave:
+      url: jdbc:sqlite:prescription_read.db
+      driver-class-name: org.sqlite.JDBC
 
 mybatis-plus:
   mapper-locations: classpath:mapper/xml/*.xml
