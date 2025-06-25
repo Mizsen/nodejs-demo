@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    primary:
+      url: jdbc:sqlite:prescription_write.db
+      driver-class-name: org.sqlite.JDBC
+    slave:
+      url: jdbc:sqlite:prescription_read.db
+      driver-class-name: org.sqlite.JDBC
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/xml/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  multi-datasource:
+    primary: primary
+    secondary: slave
+
+server:
+  port: 8080
+
+jwt:
+  secret: 5412c88c60e25a5ceb145e5a0390db80
+  expiration: 3600
+  header: Authorization
+
+logging:
+  level:
+    root: INFO
+    com.example.prescription: DEBUG
