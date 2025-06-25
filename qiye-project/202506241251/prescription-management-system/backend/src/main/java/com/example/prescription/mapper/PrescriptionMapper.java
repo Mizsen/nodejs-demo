@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @author 你的姓名
  * @since 2025-06-24
  */
-@Mapper
+//@Mapper
 public interface PrescriptionMapper extends BaseMapper<PrescriptionEntity> {
 
 }
