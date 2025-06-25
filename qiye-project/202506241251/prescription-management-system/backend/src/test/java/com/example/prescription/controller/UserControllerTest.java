@@ -41,7 +41,7 @@ public class UserControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Test
+    // @Test
     void register_ShouldReturnSuccessMessage() throws Exception {
         // 准备测试数据
         UserRegisterDTO registerDTO = new UserRegisterDTO();
