@@ -1,10 +1,9 @@
-package com.example.prescription.config;
+package com.example.demo.config;
 
-public class DataSourceContextHolder {
+public class DbContextHolder {
     private static final ThreadLocal<DbType> contextHolder = new ThreadLocal<>();
 
     public static void setDbType(DbType dbType) {
-        if (dbType == null) throw new IllegalArgumentException("数据源类型不能为null");
         contextHolder.set(dbType);
     }
 

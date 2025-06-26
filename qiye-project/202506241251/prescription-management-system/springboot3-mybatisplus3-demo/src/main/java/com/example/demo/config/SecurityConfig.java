@@ -1,4 +1,4 @@
-package com.example.prescription.config;
+package com.example.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,10 +18,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**")
-                        .permitAll()
-                        .requestMatchers("/api/drugs/**").hasAnyRole("PHARMACIST", "ADMIN")
-                        .requestMatchers("/api/prescriptions/**").hasAnyRole("DOCTOR", "ADMIN")
-                        .anyRequest().authenticated()).httpBasic(Customizer.withDefaults());
+                        .permitAll().requestMatchers("/api/drugs/**")
+                        .hasAnyRole("PHARMACIST", "ADMIN")
+                        .requestMatchers("/api/prescriptions/**")
+                        .hasAnyRole("DOCTOR", "ADMIN")
+                        .anyRequest()
+                        .authenticated())
+                .httpBasic(Customizer.withDefaults());
         return http.build();
     }
 }

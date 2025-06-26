@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is the frontend part of the Prescription Management System, designed to provide a user-friendly interface for managing prescriptions and drugs. It is built using Vue 3 and Vite, ensuring a modern and efficient development experience.
+This project is the frontend part of the Prescription Management System, designed to provide a userEntity-friendly interface for managing prescriptions and drugs. It is built using Vue 3 and Vite, ensuring a modern and efficient development experience.
 
 ## Features
 

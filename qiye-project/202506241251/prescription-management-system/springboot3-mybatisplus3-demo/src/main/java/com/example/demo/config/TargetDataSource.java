@@ -1,3 +1,4 @@
+package com.example.demo.config;/*
 package com.example.prescription.annotation;
 
 import java.lang.annotation.*;
@@ -8,4 +9,4 @@ import java.lang.annotation.*;
 @Documented
 public @interface TargetDataSource {
     String value(); // 数据源名称，例如 "primary" 或 "slave"
-}
+}*/

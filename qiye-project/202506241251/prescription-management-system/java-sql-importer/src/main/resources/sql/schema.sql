@@ -1,5 +1,5 @@
 -- 用户表
-CREATE TABLE IF NOT EXISTS user (
+CREATE TABLE IF NOT EXISTS userEntity (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL,
@@ -10,12 +10,12 @@ CREATE TABLE IF NOT EXISTS user (
     last_login_time DATETIME,
     last_login_ip VARCHAR(45)
 );
-CREATE UNIQUE INDEX IF NOT EXISTS idx_user_username ON user(username);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_user_username ON userEntity(username);
 
 -- 权限表
 CREATE TABLE IF NOT EXISTS authority (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER REFERENCES user(id),
+    user_id INTEGER REFERENCES userEntity(id),
     authority VARCHAR(50) NOT NULL
 );
 CREATE UNIQUE INDEX IF NOT EXISTS idx_user_authority ON authority(user_id, authority);
@@ -28,9 +28,9 @@ CREATE TABLE IF NOT EXISTS prescription (
     usage TEXT NOT NULL,
     treatment_cycle VARCHAR(50),
     created_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-    created_by INTEGER REFERENCES user(id),
+    created_by INTEGER REFERENCES userEntity(id),
     updated_time DATETIME,
-    updated_by INTEGER REFERENCES user(id)
+    updated_by INTEGER REFERENCES userEntity(id)
 );
 CREATE INDEX IF NOT EXISTS idx_prescription_name ON prescription(prescription_name);
 CREATE INDEX IF NOT EXISTS idx_prescription_indication ON prescription(indications);
@@ -43,9 +43,9 @@ CREATE TABLE IF NOT EXISTS drug (
     manufacturer VARCHAR(100),
     indications TEXT,
     created_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-    created_by INTEGER REFERENCES user(id),
+    created_by INTEGER REFERENCES userEntity(id),
     updated_time DATETIME,
-    updated_by INTEGER REFERENCES user(id)
+    updated_by INTEGER REFERENCES userEntity(id)
 );
 CREATE INDEX IF NOT EXISTS idx_drug_name ON drug(drug_name);
 
