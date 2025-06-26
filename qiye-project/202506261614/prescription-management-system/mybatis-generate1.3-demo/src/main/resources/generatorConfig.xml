@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!-- <classPathEntry location="lib/sqlite-jdbc-3.45.3.0.jar"/> -->
+
+    <!-- ...context... -->
+    <context id="SQLiteTables" targetRuntime="MyBatis3">
+
+
+
+        <!-- Java 21 配置 -->
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <property name="useJava8" value="true"/>
+        <property name="useJavaTimeTypes" value="true"/>
+        <property name="useRecordType" value="true"/>
+   
+
+
+
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+
+        <jdbcConnection driverClass="org.sqlite.JDBC" connectionURL="jdbc:sqlite:todo.db" userId="" password="">
+            <!-- SQLite 特定配置 -->
+
+            <property name="date_string_format" value="yyyy-MM-dd"/>
+            <property name="time_string_format" value="HH:mm:ss"/>
+            <property name="timestamp_string_format" value="yyyy-MM-dd HH:mm:ss"/>
+        </jdbcConnection>
+
+        <javaModelGenerator targetPackage="com.example.prescription.entity" targetProject="src/main/java"/>
+
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
+
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.example.prescription.mapper" targetProject="src/main/java"/>
+
+        <table tableName="user"/>
+           
+        <table tableName="authority"/>
+        <table tableName="prescription"/>
+        <table tableName="drug"/>
+        <table tableName="prescription_drug"/>
+        <table tableName="prescription_image"/>
+        <table tableName="drug_image"/>
+
+    </context>
+</generatorConfiguration>

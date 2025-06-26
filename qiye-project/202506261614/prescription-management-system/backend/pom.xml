@@ -59,12 +59,6 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
 
-        <!-- 关键：使用官方适配 Spring Boot 3 的 starter -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
-            <version>3.5.6</version>
-        </dependency>
 
         <!-- SQLite -->
         <dependency>
