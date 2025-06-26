@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.prescription.mapper.DrugImageMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.prescription.entity.DrugImageEntity">
+        <id column="id" property="id" />
+        <result column="drug_id" property="drugId" />
+        <result column="image_path" property="imagePath" />
+        <result column="image_type" property="imageType" />
+        <result column="sort_order" property="sortOrder" />
+        <result column="created_time" property="createdTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, drug_id, image_path, image_type, sort_order, created_time
+    </sql>
+
+</mapper>

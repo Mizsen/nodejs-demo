@@ -1,0 +1,76 @@
+server:
+  port: 8080
+#
+#spring:
+#  datasource:
+#    driver-class-name: org.sqlite.JDBC
+#    url: jdbc:sqlite:file:./data/test.db?mode=rwc
+#    hikari:
+#      maximum-pool-size: 1  # SQLite 需要单连接
+#      connection-timeout: 30000
+#  autoconfigure:
+#    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+#
+#mybatis-plus:
+#  configuration:
+#    default-enum-type-handler: org.apache.ibatis.type.EnumTypeHandler
+#    map-underscore-to-camel-case: true
+#  global-config:
+#    db-config:
+#      id-type: auto
+#      logic-delete-field: deleted  # 逻辑删除字段
+#      logic-not-delete-value: 0
+#      logic-delete-value: 1
+#
+#
+#logging:
+#  level:
+#    root: INFO
+#    org.springframework.jdbc: DEBUG
+#    com.baomidou.mybatisplus: TRACE
+
+
+
+#spring:
+#  datasource:
+#    url: jdbc:sqlite:file:data/prescription_write.db?mode=rwc
+#    driver-class-name: org.sqlite.JDBC
+#    hikari:
+#      maximum-pool-size: 1
+
+spring:
+  datasource:
+    primary:
+        jdbc-url: jdbc:sqlite:file:data/prescription_write.db?mode=rwc
+        driver-class-name: org.sqlite.JDBC
+        hikari:
+          maximum-pool-size: 1
+          connection-timeout: 30000
+    slave:
+        jdbc-url: jdbc:sqlite:file:data/prescription_read.db?mode=rwc
+        driver-class-name: org.sqlite.JDBC
+        hikari:
+          maximum-pool-size: 1
+          connection-timeout: 30000
+
+#mybatis-plus:
+#  # 禁用所有可能冲突的自动配置
+##  global-config:
+##    banner: false
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 开启SQL日志
+#    default-enum-type-handler: org.apache.ibatis.type.EnumTypeHandler
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/xml/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    default-enum-type-handler: org.apache.ibatis.type.EnumTypeHandler
+
+
+
+
+jwt:
+#  secret: 5412c88c60e25a5ceb145e5a0390db80
+#  expiration: 3600
+  header: Authorization
