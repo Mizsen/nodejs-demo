@@ -6,41 +6,36 @@
     <!-- <classPathEntry location="lib/sqlite-jdbc-3.45.3.0.jar"/> -->
 
     <!-- ...context... -->
-    <context id="SQLiteTables" targetRuntime="MyBatis3">
+    <!--    <context id="SQLiteTables" targetRuntime="MyBatis3">-->
 
+    <context id="SQLiteTables" targetRuntime="MyBatis3Simple"><!--全局禁用Example生成-->
 
-
-        <!-- Java 21 配置 -->
         <property name="javaFileEncoding" value="UTF-8"/>
         <property name="useJava8" value="true"/>
         <property name="useJavaTimeTypes" value="true"/>
         <property name="useRecordType" value="true"/>
-   
-
-
 
         <commentGenerator>
             <property name="suppressDate" value="true"/>
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
 
-
+        <!-- 数据库连接配置 -->
         <jdbcConnection driverClass="org.sqlite.JDBC" connectionURL="jdbc:sqlite:todo.db" userId="" password="">
             <!-- SQLite 特定配置 -->
-
             <property name="date_string_format" value="yyyy-MM-dd"/>
             <property name="time_string_format" value="HH:mm:ss"/>
             <property name="timestamp_string_format" value="yyyy-MM-dd HH:mm:ss"/>
         </jdbcConnection>
 
+        <!-- 生成策略配置 -->
         <javaModelGenerator targetPackage="com.example.prescription.entity" targetProject="src/main/java"/>
-
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
+        <javaClientGenerator targetPackage="com.example.prescription.mapper"
+                             targetProject="src/main/java" type="XMLMAPPER"/>
 
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.example.prescription.mapper" targetProject="src/main/java"/>
-
+        <!-- 表配置 -->
         <table tableName="user"/>
-           
         <table tableName="authority"/>
         <table tableName="prescription"/>
         <table tableName="drug"/>

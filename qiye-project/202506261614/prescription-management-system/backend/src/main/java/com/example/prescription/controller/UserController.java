@@ -1,15 +1,16 @@
 package com.example.prescription.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
 import com.example.prescription.dto.UserLoginDTO;
 import com.example.prescription.dto.UserRegisterDTO;
-import com.example.prescription.entity.UserEntity;
+import com.example.prescription.entity.User;
 import com.example.prescription.service.UserService;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.example.prescription.utils.JsonUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import com.example.prescription.utils.JwtUtil;
  * @author 你的姓名
  * @since 2025-06-24
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/auth")
 public class UserController {
@@ -41,7 +43,7 @@ public class UserController {
 
     @PostMapping("/register")
     public Map<String, Object> register(@RequestBody UserRegisterDTO dto) {
-        UserEntity user = new UserEntity();
+        User user = new User();
         user.setUsername(dto.getUsername());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setRealName(dto.getRealName());
@@ -57,12 +59,10 @@ public class UserController {
     @PostMapping("/login")
     public Map<String, Object> login(@RequestBody UserLoginDTO dto) {
 
-        UserEntity userEntity1 = userService.getById(2);
+        User userEntity1 = userService.findUserById(2);
         logger.info("userService.getById:{}", JsonUtils.toJson(userEntity1));
 
-        UserEntity user = userService.getOne(
-                new QueryWrapper<UserEntity>().eq("username", dto.getUsername())
-        );
+        User user = userEntity1;
         Map<String, Object> result = new HashMap<>();
         if (
                 user == null ||
