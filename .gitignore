@@ -7,7 +7,8 @@
 # all-dianshang-project/flash-sale-system/node_modules/
 # im-project/socket-node-demo/node_modules/
 
-
+/**/.idea/
+/**/.comate/
 # java
 
 # 忽略所有目录中的 target 文件夹
