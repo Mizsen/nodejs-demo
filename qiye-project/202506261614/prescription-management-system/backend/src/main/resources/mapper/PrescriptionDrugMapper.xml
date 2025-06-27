@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.prescription.mapper.PrescriptionDrugMapper">
+  <resultMap id="BaseResultMap" type="com.example.prescription.entity.PrescriptionDrug">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="prescription_id" jdbcType="INTEGER" property="prescriptionId" />
+    <result column="drug_id" jdbcType="INTEGER" property="drugId" />
+    <result column="dosage" jdbcType="VARCHAR" property="dosage" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from prescription_drug
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.prescription.entity.PrescriptionDrug">
+    insert into prescription_drug (id, prescription_id, drug_id, 
+      dosage)
+    values (#{id,jdbcType=INTEGER}, #{prescriptionId,jdbcType=INTEGER}, #{drugId,jdbcType=INTEGER}, 
+      #{dosage,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.prescription.entity.PrescriptionDrug">
+    update prescription_drug
+    set prescription_id = #{prescriptionId,jdbcType=INTEGER},
+      drug_id = #{drugId,jdbcType=INTEGER},
+      dosage = #{dosage,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, prescription_id, drug_id, dosage
+    from prescription_drug
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, prescription_id, drug_id, dosage
+    from prescription_drug
+  </select>
+</mapper>
