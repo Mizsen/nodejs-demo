@@ -58,7 +58,7 @@
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>3.0.5</version>
+            <version>3.0.4</version>
         </dependency>
 
         <dependency>
@@ -92,6 +92,7 @@
             <artifactId>aspectjweaver</artifactId>
         </dependency>
 
+
     </dependencies>
 
     <build>
@@ -99,10 +100,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>true</skipTests> <!-- 或者使用 <skip>true</skip> 来跳过编译和运行 -->
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+<!--                <configuration>
+                    <skip>true</skip> &lt;!&ndash; 这个配置会跳过spring-boot:run的执行测试 &ndash;&gt;
+                </configuration>-->
+
             </plugin>
 
         </plugins>

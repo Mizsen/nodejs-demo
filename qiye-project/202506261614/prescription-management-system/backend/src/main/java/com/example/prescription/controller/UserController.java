@@ -43,16 +43,26 @@ public class UserController {
 
     @PostMapping("/register")
     public Map<String, Object> register(@RequestBody UserRegisterDTO dto) {
+
+        log.info("register:{}", JsonUtils.toJson(dto));
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setRealName(dto.getRealName());
         user.setRole(dto.getRole());
         user.setEnabled(1);
-        userService.save(user);
+
+       int count= userService.save(user);
 
         Map<String, Object> result = new HashMap<>();
-        result.put("msg", "注册成功");
+
+       if (count>0){
+           result.put("msg", "注册成功");
+
+       }else {
+           result.put("msg", "注册失败");
+       }
+
         return result;
     }
 

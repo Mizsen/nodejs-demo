@@ -40,5 +40,10 @@ logging:
     com.example.prescription: DEBUG
     com.example.prescription.mapper: DEBUG
     org.mybatis: DEBUG
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr([%thread]){blue} %clr([%file:%line]){magenta} %clr(%-5level){green} %clr(%logger{36}){cyan} - %msg%n"
+    file:
+      name: ./logs/app.log
+      pattern: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %caller{1}:%line - %msg%n"
 
 #debug: true

@@ -38,6 +38,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int save(User user) {
+
+        log.info("save: {}<UNK>: {}", DataSourceContextHolder.getDbType(), user);
         return userMapper.insert(user);
     }
 }
