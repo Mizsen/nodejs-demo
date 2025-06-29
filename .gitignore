@@ -26,3 +26,5 @@
 # qiye-project/202506091014/blog-system/backend/logs
 *.log
 # 忽略所有目录中的 log 文件夹
+
+qiye-project/202506272242/prescription-management-system/backend/data/prescription_read.db

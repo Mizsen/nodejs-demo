@@ -1,5 +1,6 @@
 package com.example.prescription.job;
 
+import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,13 +34,20 @@ public class DatabaseFileSyncServiceJob {
         this.slaveDataSource = slaveDataSource;
     }
 
+    private void closeSlaveConnections() {
+        if (slaveDataSource instanceof HikariDataSource) {
+            ((HikariDataSource) slaveDataSource).close();
+            log.info("slaveDataSource 已关闭所有连接。");
+        }
+    }
+
     /**
      * 每5分钟同步一次
      */
     @Scheduled(fixedRate = 1 * 60 * 1000)
     public void syncDatabaseFiles() {
         log.info("定时同步任务开始执行...");
-
+        closeSlaveConnections(); // 同步前关闭slaveDataSource连接
         try (Connection sourceConn = primaryDataSource.getConnection()) {
             // 1. 检查连接状态（调试用）
             log.info("Auto-commit状态: {}", sourceConn.getAutoCommit());
