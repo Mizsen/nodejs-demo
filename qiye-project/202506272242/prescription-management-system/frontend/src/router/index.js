@@ -30,13 +30,21 @@ const routes = [
     component: DrugDetail,
   },
   {
-    path: '/user/list',
-    name: 'UserList',
-    component: () => import('../views/UserList.vue'),
+    path: '/admin',
+    component: () => import('../views/Admin.vue'),
+    children: [
+      {
+        path: 'user/list',
+        name: 'UserList',
+        component: () => import('../views/UserList.vue'),
+      },
+      // 你可以继续添加药品、药方等子页面
+      // { path: 'drug/list', name: 'DrugList', component: ... },
+      // { path: 'prescription/list', name: 'PrescriptionList', component: ... },
+      // ...
+    ],
   },
-  // 系统管理页（后续实现）
-  { path: '/admin', name: 'Admin', component: () => import('../views/Admin.vue') },
-  { path: '/', redirect: '/login' },
+  { path: '/', redirect: '/admin/user/list' },
 ];
 
 const router = createRouter({

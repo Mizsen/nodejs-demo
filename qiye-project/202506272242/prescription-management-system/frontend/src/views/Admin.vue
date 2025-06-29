@@ -45,15 +45,15 @@ const activeMenu = computed(() => route.path);
 // 菜单映射：根据后端返回的菜单名生成二级菜单
 const menuMap = {
   '药品管理': [
-    { label: '新增药品', path: '/drug/edit' },
-    { label: '药品列表', path: '/drug/list' }
+    { label: '新增药品', path: '/admin/drug/edit' },
+    { label: '药品列表', path: '/admin/drug/list' }
   ],
   '药方管理': [
-    { label: '新增药方', path: '/prescription/edit' },
-    { label: '药方列表', path: '/prescription/list' }
+    { label: '新增药方', path: '/admin/prescription/edit' },
+    { label: '药方列表', path: '/admin/prescription/list' }
   ],
   '用户管理': [
-    { label: '用户列表', path: '/user/list' }
+    { label: '用户列表', path: '/admin/user/list' }
   ]
 };
 
