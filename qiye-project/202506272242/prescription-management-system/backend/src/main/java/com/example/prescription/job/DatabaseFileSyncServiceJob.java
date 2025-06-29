@@ -56,8 +56,17 @@ public class DatabaseFileSyncServiceJob {
             Path backupPath = Paths.get("data/prescription_read.db");
             try {
                 Files.deleteIfExists(backupPath);
+                // 再次确认文件已删除
+                if (Files.exists(backupPath)) {
+                    log.warn("备份文件仍然存在，跳过本次同步！");
+                    return;
+                }
             } catch (IOException e) {
                 log.info("删除旧备份文件失败（可能文件不存在或无权访问）: {}", e.getMessage());
+                if (Files.exists(backupPath)) {
+                    log.warn("备份文件仍然存在，跳过本次同步！");
+                    return;
+                }
             }
 
             // 4. 执行VACUUM（关键操作）

@@ -156,4 +156,21 @@ public class UserController {
         result.put("expire", jwtUtil.getExpireTime(newToken));
         return result;
     }
+
+    @GetMapping("/users")
+    public Map<String, Object> listUsers() {
+        List<User> users = userService.findAll();
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (User user : users) {
+            Map<String, Object> u = new HashMap<>();
+            u.put("username", user.getUsername());
+            u.put("realName", user.getRealName());
+            u.put("role", user.getRole());
+            list.add(u);
+        }
+        Map<String, Object> result = new HashMap<>();
+        result.put("list", list);
+        result.put("total", list.size());
+        return result;
+    }
 }

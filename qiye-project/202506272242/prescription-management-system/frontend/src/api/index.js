@@ -1,5 +1,26 @@
 import axios from 'axios';
 
+// 请求拦截器：自动带上token
+axios.interceptors.request.use(config => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, error => Promise.reject(error));
+
+// 响应拦截器：401自动跳转登录
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem('token');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
 const apiClient = axios.create({
   baseURL: 'http://localhost:8080/api', // Adjust the base URL as needed
   headers: {
@@ -58,3 +79,5 @@ export const drugApi = {
     });
   },
 };
+
+export default apiClient;

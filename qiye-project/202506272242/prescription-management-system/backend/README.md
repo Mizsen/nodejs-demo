@@ -1,3 +1,9 @@
+
+set JAVA_HOME="E:\Windows10\Java64\jdk-21"
+set path=E:\Windows10\Java64\jdk-21\bin;E:\__apache\apache-maven-3.9.10\bin;%path%
+
+
+
 # Prescription Management System - Backend
 
 ## Overview
