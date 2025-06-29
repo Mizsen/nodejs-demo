@@ -81,3 +81,7 @@ mvn test -Dtest=UserControllerTest#login_WithValidCredentials_ShouldReturnToken
 
 
 mvn test -Dtest=UserControllerTest#register_ShouldReturnSuccessMessage
+
+
+-- 这个是api接口。
+mvn exec:java -Dexec.mainClass="test.ApiTest" -Dexec.classpathScope=test

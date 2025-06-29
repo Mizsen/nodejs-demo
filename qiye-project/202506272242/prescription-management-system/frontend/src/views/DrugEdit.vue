@@ -25,7 +25,7 @@
 <script>
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { updateDrugApi } from '@/api/drug';
+import { drugApi } from '@/api/index.js'; // Assume this API function is defined
 
 export default {
   setup() {
@@ -45,7 +45,7 @@ export default {
     };
 
     const updateDrug = async () => {
-      await updateDrugApi(drug.value);
+      await drugApi.updateDrugApi(drug.value);
       router.push('/drugs'); // Redirect to drugs list after update
     };
 

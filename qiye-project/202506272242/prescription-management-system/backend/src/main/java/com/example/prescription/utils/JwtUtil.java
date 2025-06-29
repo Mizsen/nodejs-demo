@@ -7,7 +7,6 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @Component
@@ -93,11 +92,11 @@ public class JwtUtil {
 
     /**
      * 从HttpServletRequest获取token
+     * Java 21建议由Controller层传递header字符串，不直接依赖servlet
      */
-    public static String resolveToken(HttpServletRequest request) {
-        String bearer = request.getHeader("Authorization");
-        if (bearer != null && bearer.startsWith("Bearer ")) {
-            return bearer.substring(7);
+    public static String resolveToken(String authorizationHeader) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            return authorizationHeader.substring(7);
         }
         return null;
     }

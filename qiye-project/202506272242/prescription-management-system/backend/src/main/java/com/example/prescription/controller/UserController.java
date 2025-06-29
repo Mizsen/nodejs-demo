@@ -6,6 +6,7 @@ import com.example.prescription.entity.User;
 import com.example.prescription.service.UserService;
 import com.example.prescription.utils.JsonUtils;
 import com.example.prescription.utils.JwtUtil;
+import com.example.prescription.utils.RequestLogUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,8 +58,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public Map<String, Object> register(@RequestBody UserRegisterDTO dto) {
-        log.info("register:{}", JsonUtils.toJson(dto));
+    public Map<String, Object> register(@RequestBody UserRegisterDTO dto, HttpServletRequest request) {
+        log.info(RequestLogUtil.printRequestParams(request, dto));
         Map<String, Object> result = new HashMap<>();
         if (!isPasswordStrong(dto.getPassword())) {
             result.put("success", false);
@@ -89,7 +90,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody UserLoginDTO dto) {
+    public Map<String, Object> login(@RequestBody UserLoginDTO dto, HttpServletRequest request) {
+        log.info(RequestLogUtil.printRequestParams(request, dto));
         Map<String, Object> result = new HashMap<>();
         User user = userService.findByUsername(dto.getUsername());
         if (user == null) {
@@ -128,7 +130,8 @@ public class UserController {
 
     @GetMapping("/me")
     public Map<String, Object> getCurrentUser(HttpServletRequest request) {
-        String token = jwtUtil.resolveToken(request);
+        log.info(RequestLogUtil.printRequestParams(request, null));
+        String token = JwtUtil.resolveToken(request.getHeader("Authorization"));
         String username = jwtUtil.getUsernameFromToken(token);
         User user = userService.findByUsername(username);
         Map<String, Object> result = new HashMap<>();
@@ -140,7 +143,8 @@ public class UserController {
 
     @PostMapping("/refresh-token")
     public Map<String, Object> refreshToken(HttpServletRequest request) {
-        String oldToken = jwtUtil.resolveToken(request);
+        log.info(RequestLogUtil.printRequestParams(request, null));
+        String oldToken = JwtUtil.resolveToken(request.getHeader("Authorization"));
         if (!jwtUtil.validateToken(oldToken)) {
             throw new RuntimeException("Token已过期");
         }

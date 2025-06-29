@@ -49,4 +49,10 @@
     last_login_ip
     from user
   </select>
+  <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, username, password, real_name, role, enabled, created_time, last_login_time, 
+    last_login_ip
+    from user
+    where username = #{username,jdbcType=VARCHAR}
+  </select>
 </mapper>

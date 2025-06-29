@@ -16,28 +16,7 @@
     delete from prescription
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <!-- <insert id="insert" parameterType="com.example.prescription.entity.Prescription">
-    insert into prescription (id, prescription_name, indications, 
-      usage, treatment_cycle, created_time, 
-      created_by, updated_time, updated_by
-      )
-    values (#{id,jdbcType=INTEGER}, #{prescriptionName,jdbcType=VARCHAR}, #{indications,jdbcType=VARCHAR}, 
-      #{usage,jdbcType=VARCHAR}, #{treatmentCycle,jdbcType=VARCHAR}, #{createdTime,jdbcType=VARCHAR}, 
-      #{createdBy,jdbcType=INTEGER}, #{updatedTime,jdbcType=VARCHAR}, #{updatedBy,jdbcType=INTEGER}
-      )
-  </insert> -->
-  <!-- <update id="updateByPrimaryKey" parameterType="com.example.prescription.entity.Prescription">
-    update prescription
-    set prescription_name = #{prescriptionName,jdbcType=VARCHAR},
-      indications = #{indications,jdbcType=VARCHAR},
-      usage = #{usage,jdbcType=VARCHAR},
-      treatment_cycle = #{treatmentCycle,jdbcType=VARCHAR},
-      created_time = #{createdTime,jdbcType=VARCHAR},
-      created_by = #{createdBy,jdbcType=INTEGER},
-      updated_time = #{updatedTime,jdbcType=VARCHAR},
-      updated_by = #{updatedBy,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
-  </update> -->
+  
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, prescription_name, indications, usage, treatment_cycle, created_time, 
     created_by, updated_time, updated_by
