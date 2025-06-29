@@ -22,7 +22,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import { login } from '@/api/auth';
+import { authApi } from '@/api/index';
 import { ElMessage } from 'element-plus';
 
 const router = useRouter();
@@ -33,7 +33,7 @@ const loading = ref(false);
 const onLogin = async () => {
   loading.value = true;
   try {
-    const { data } = await login(form.value);
+    const { data } = await authApi.login(form.value);
     if (data.success && data.token) {
       localStorage.setItem('token', data.token); // 显式保存token
       await store.dispatch('login', data);

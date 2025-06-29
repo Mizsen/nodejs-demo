@@ -18,8 +18,8 @@ import axios from '@/api/index';
 const users = ref([]);
 
 onMounted(async () => {
-  // 假设后端有 /api/users 接口返回用户列表
-  const { data } = await axios.get('/users');
+  // 正确的后端接口路径
+  const { data } = await axios.get('/auth/users');
   users.value = data.list || [];
 });
 </script>

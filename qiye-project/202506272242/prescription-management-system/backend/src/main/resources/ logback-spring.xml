@@ -8,6 +8,7 @@
         </rollingPolicy>
         <encoder>
             <pattern>${FILE_PATTERN}</pattern>
+            <charset>UTF-8</charset>
         </encoder>
     </appender>
     <root level="INFO">

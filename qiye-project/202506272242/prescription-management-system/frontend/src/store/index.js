@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { getMe } from '@/api/auth';
+import { authApi } from '@/api/index';
 
 const state = {
   token: localStorage.getItem('token') || '',
@@ -49,7 +49,7 @@ const actions = {
     commit('SET_MENU', data.menu);
   },
   async fetchMe({ commit }) {
-    const { data } = await getMe();
+    const { data } = await authApi.getMe();
     commit('SET_USER', { username: data.username, role: data.role });
     commit('SET_MENU', data.menu);
   },

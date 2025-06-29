@@ -31,7 +31,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { register } from '@/api/auth';
+import { authApi } from '@/api/index';
 import { ElMessage } from 'element-plus';
 
 const router = useRouter();
@@ -41,7 +41,7 @@ const loading = ref(false);
 const onRegister = async () => {
   loading.value = true;
   try {
-    const { data } = await register(form.value);
+    const { data } = await authApi.register(form.value);
     if (data.success) {
       ElMessage.success('注册成功，请登录');
       router.push('/login');

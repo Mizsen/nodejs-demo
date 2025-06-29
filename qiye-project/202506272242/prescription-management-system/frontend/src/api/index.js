@@ -80,4 +80,20 @@ export const drugApi = {
   },
 };
 
+// Auth API
+export const authApi = {
+  login(data) {
+    return apiClient.post('/auth/login', data);
+  },
+  register(data) {
+    return apiClient.post('/auth/register', data);
+  },
+  getMe() {
+    return apiClient.get('/auth/me');
+  },
+  refreshToken() {
+    return apiClient.post('/auth/refresh-token');
+  }
+};
+
 export default apiClient;

@@ -44,11 +44,9 @@
     from user
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap">
-    select id, username, password, real_name, role, enabled, created_time, last_login_time, 
-    last_login_ip
-    from user
-  </select>
+  <select id="selectAll" resultType="com.example.prescription.entity.User">
+        SELECT * FROM user
+    </select>
   <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
     select id, username, password, real_name, role, enabled, created_time, last_login_time, 
     last_login_ip
