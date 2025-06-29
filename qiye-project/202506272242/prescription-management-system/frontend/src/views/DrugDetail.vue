@@ -14,7 +14,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { getDrugDetail } from '@/api/drug'; // Assume this API function is defined
+import { drugApi } from '@/api/index.js'; // Assume this API function is defined
 import ImageViewer from '@/components/ImageViewer.vue';
 
 export default {
@@ -28,7 +28,7 @@ export default {
 
     const fetchDrugDetail = async () => {
       const drugId = route.params.id;
-      const response = await getDrugDetail(drugId);
+      const response = await drugApi.getDrugDetail(drugId);
       drug.value = response.data;
       drugImages.value = response.data.images; // Assuming images are part of the drug detail response
     };

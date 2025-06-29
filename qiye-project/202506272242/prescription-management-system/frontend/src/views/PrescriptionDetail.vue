@@ -22,7 +22,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { getPrescriptionDetail } from '@/api/prescription';
+import { prescriptionApi } from '@/api/index.js';
 import ImageViewer from '@/components/ImageViewer.vue';
 
 export default {
@@ -34,7 +34,7 @@ export default {
     const prescription = ref({});
 
     const fetchPrescriptionDetail = async () => {
-      const response = await getPrescriptionDetail(route.params.id);
+      const response = await prescriptionApi.getPrescription(route.params.id);
       prescription.value = response.data;
     };
 

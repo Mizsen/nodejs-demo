@@ -102,31 +102,8 @@ public class DrugController {
                                                 @RequestParam("files") MultipartFile[] files,
                                                 @RequestParam("imageType") String imageType) {
         Map<String, Object> result = new HashMap<>();
-        List<String> filePaths = new ArrayList<>();
-        String uploadDir = System.getProperty("user.dir") + "/upload/drug";
-        File dir = new File(uploadDir);
-        if (!dir.exists()) dir.mkdirs();
-
-        boolean allOk = true;
-        for (MultipartFile file : files) {
-            if (file.isEmpty()) continue;
-            String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
-            String newFileName = System.currentTimeMillis() + "_" + originalFilename;
-            File dest = new File(dir, newFileName);
-            try {
-                file.transferTo(dest);
-                com.example.prescription.entity.DrugImage img = new com.example.prescription.entity.DrugImage();
-                img.setDrugId(id);
-                img.setImagePath("/upload/drug/" + newFileName);
-                img.setImageType(imageType);
-                img.setSortOrder(0);
-                boolean ok = drugImageService.saveDrugImage(img);
-                allOk = allOk && ok;
-                filePaths.add("/upload/drug/" + newFileName);
-            } catch (IOException e) {
-                allOk = false;
-            }
-        }
+        List<String> filePaths = drugImageService.saveDrugImages(id, files, imageType);
+        boolean allOk = filePaths.size() == files.length;
         result.put("success", allOk);
         result.put("paths", filePaths);
         result.put("msg", allOk ? "上传成功" : "部分或全部上传失败");
@@ -143,3 +120,4 @@ public class DrugController {
         return result;
     }
 }
+                

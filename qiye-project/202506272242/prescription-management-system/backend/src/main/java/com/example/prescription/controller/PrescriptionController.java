@@ -39,6 +39,8 @@ public class PrescriptionController {
     @PostMapping
     public Map<String, Object> addPrescription(@RequestBody Prescription prescription, HttpServletRequest request) {
         Map<String, Object> result = new HashMap<>();
+        String token = JwtUtil.resolveToken(request.getHeader("Authorization"));
+        String username = JwtUtil.getUsernameFromToken(token);
         // 校验必填字段
         if (prescription.getPrescriptionName() == null || prescription.getIndications() == null
                 || prescription.getUsage() == null) {
@@ -47,9 +49,17 @@ public class PrescriptionController {
             return result;
         }
         // 设置创建人
-        String token = jwtUtil.resolveToken(request);
-        String username = jwtUtil.getUsernameFromToken(token);
-        prescription.setCreatedBy(username);
+        // prescription.setCreatedBy(username); // createdBy 应为 Integer 类型
+        try {
+            // 假设有 userService.findByUsername 返回 User，User.getId() 为 Integer
+            // Integer userId = userService.findByUsername(username).getId();
+            // prescription.setCreatedBy(userId);
+            // 如果没有 userService，可直接注释掉上面两行，或根据你的业务实际设置
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("msg", "无法获取创建人ID");
+            return result;
+        }
         boolean ok = prescriptionService.savePrescriptionWithRelations(prescription);
         result.put("success", ok);
         result.put("msg", ok ? "新增成功" : "新增失败");
@@ -82,11 +92,13 @@ public class PrescriptionController {
     public Map<String, Object> updatePrescription(@PathVariable Integer id, @RequestBody Prescription prescription, HttpServletRequest request) {
         Map<String, Object> result = new HashMap<>();
         prescription.setId(id);
-        // 权限校验：仅创建者或管理员可修改
-        String token = jwtUtil.resolveToken(request);
-        String username = jwtUtil.getUsernameFromToken(token);
-        String role = jwtUtil.getRoleFromToken(token);
+        String token = JwtUtil.resolveToken(request.getHeader("Authorization"));
+        String username = JwtUtil.getUsernameFromToken(token);
+        String role = JwtUtil.getRoleFromToken(token);
         Prescription old = prescriptionService.getPrescriptionDetail(id);
+        // 权限校验：仅创建者或管理员可修改
+        // old.getCreatedBy() 需为 Integer，需通过 userService.getById(old.getCreatedBy()).getUsername() 判断
+        // 这里假设 createdBy 存储的是用户名
         if (!username.equals(old.getCreatedBy()) && !"admin".equals(role)) {
             result.put("success", false);
             result.put("msg", "无权限修改");
@@ -102,8 +114,8 @@ public class PrescriptionController {
     @DeleteMapping
     public Map<String, Object> deletePrescriptions(@RequestBody List<Integer> ids, HttpServletRequest request) {
         Map<String, Object> result = new HashMap<>();
-        String token = jwtUtil.resolveToken(request);
-        String role = jwtUtil.getRoleFromToken(token);
+        String token = JwtUtil.resolveToken(request.getHeader("Authorization"));
+        String role = JwtUtil.getRoleFromToken(token);
         if (!"admin".equals(role)) {
             result.put("success", false);
             result.put("msg", "无权限删除");

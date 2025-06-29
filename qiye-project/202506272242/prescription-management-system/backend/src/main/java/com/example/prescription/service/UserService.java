@@ -8,4 +8,8 @@ public interface UserService {
 
     public int save(User user);
 
+    public User findByUsername(String username);
+
+    public int update(User user);
+
 }

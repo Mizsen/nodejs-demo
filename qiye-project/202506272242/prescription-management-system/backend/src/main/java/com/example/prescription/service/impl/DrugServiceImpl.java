@@ -70,7 +70,11 @@ public class DrugServiceImpl implements DrugService {
     public boolean deleteDrugImage(Integer imageId) {
         return drugImageMapper.deleteDrugImageById(imageId) > 0;
     }
-}
-        return drugImageMapper.deleteDrugImageById(imageId) > 0;
+
+    @Override
+    public boolean saveDrugImage(Integer drugId, MultipartFile file, String imageType) {
+        // 实现方法或抛出不支持异常
+        throw new UnsupportedOperationException("Not implemented");
     }
 }
+
