@@ -32,4 +32,11 @@ public class DataSourceConfig {
                 .type(HikariDataSource.class)
                 .build();
     }
+
+    // 提供一个可手动创建新slaveDataSource的方法
+    public DataSource createNewSlaveDataSource() {
+        return DataSourceBuilder.create()
+                .type(HikariDataSource.class)
+                .build();
+    }
 }

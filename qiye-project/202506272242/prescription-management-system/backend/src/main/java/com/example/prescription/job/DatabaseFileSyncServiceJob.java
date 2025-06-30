@@ -20,18 +20,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import com.example.prescription.config.DataSourceConfig;
+
 
 @Slf4j
 @Component
 public class DatabaseFileSyncServiceJob {
 
     private final DataSource primaryDataSource;
-    private final DataSource slaveDataSource;
+    private volatile DataSource slaveDataSource;
+    private final DataSourceConfig dataSourceConfig;
 
     @Autowired
-    public DatabaseFileSyncServiceJob(@Qualifier("primaryDataSource") DataSource primaryDataSource, @Qualifier("slaveDataSource") DataSource slaveDataSource) {
+    public DatabaseFileSyncServiceJob(@Qualifier("primaryDataSource") DataSource primaryDataSource,
+                                      @Qualifier("slaveDataSource") DataSource slaveDataSource,
+                                      DataSourceConfig dataSourceConfig) {
         this.primaryDataSource = primaryDataSource;
         this.slaveDataSource = slaveDataSource;
+        this.dataSourceConfig = dataSourceConfig;
     }
 
     private void closeSlaveConnections() {
@@ -47,7 +53,7 @@ public class DatabaseFileSyncServiceJob {
     @Scheduled(fixedRate = 1 * 60 * 1000)
     public void syncDatabaseFiles() {
         log.info("定时同步任务开始执行...");
-        closeSlaveConnections(); // 同步前关闭slaveDataSource连接
+        // closeSlaveConnections(); // 同步前关闭slaveDataSource连接
         try (Connection sourceConn = primaryDataSource.getConnection()) {
             // 1. 检查连接状态（调试用）
             log.info("Auto-commit状态: {}", sourceConn.getAutoCommit());
@@ -60,7 +66,7 @@ public class DatabaseFileSyncServiceJob {
                 }
             }
 
-            // 3. 删除旧备份文件
+            // // 3. 删除旧备份文件
             Path backupPath = Paths.get("data/prescription_read.db");
             try {
                 Files.deleteIfExists(backupPath);
@@ -86,8 +92,9 @@ public class DatabaseFileSyncServiceJob {
         } catch (SQLException e) {
             log.info("数据库同步失败: {}", e.getMessage(), e);
         }
-
-
+        // // 同步后重建slaveDataSource
+        // this.slaveDataSource = dataSourceConfig.createNewSlaveDataSource();
+        // log.info("slaveDataSource 已重新初始化。");
     }
 
 }

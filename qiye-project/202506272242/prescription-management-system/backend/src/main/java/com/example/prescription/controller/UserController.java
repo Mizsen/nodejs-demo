@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -23,6 +24,7 @@ import java.util.regex.Pattern;
 @RequestMapping("/api/auth")
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     private UserService userService;
@@ -78,6 +80,7 @@ public class UserController {
         user.setRealName(dto.getRealName());
         user.setRole(dto.getRole());
         user.setEnabled(1);
+        user.setCreatedTime(DATE_FORMAT.format(new Date())); // 注册时写入创建时间（字符串）
         int count = userService.save(user);
         if (count > 0) {
             result.put("success", true);
@@ -118,6 +121,10 @@ public class UserController {
             return result;
         }
         loginFailCount.remove(user.getUsername());
+        // 登录成功，记录登录时间和IP（字符串）
+        user.setLastLoginTime(DATE_FORMAT.format(new Date()));
+        user.setLastLoginIp(request.getRemoteAddr());
+        userService.update(user);
         String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
         result.put("success", true);
         result.put("token", token);
@@ -158,19 +165,33 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public Map<String, Object> listUsers() {
-        List<User> users = userService.findAll();
+    public Map<String, Object> listUsers(@RequestParam(defaultValue = "1") int page,
+                                         @RequestParam(defaultValue = "10") int size) {
+        List<User> all = userService.findAll();
+        int total = all.size();
+        int from = Math.max(0, (page - 1) * size);
+        int to = Math.min(from + size, total);
+        List<User> pageList = from < to ? all.subList(from, to) : Collections.emptyList();
         List<Map<String, Object>> list = new ArrayList<>();
-        for (User user : users) {
+        for (User user : pageList) {
             Map<String, Object> u = new HashMap<>();
+            u.put("id", user.getId());
             u.put("username", user.getUsername());
             u.put("realName", user.getRealName());
             u.put("role", user.getRole());
+            u.put("enabled", user.getEnabled());
+            // u.put("password", user.getPassword());
+            u.put("createdTime", user.getCreatedTime());
+            u.put("lastLoginTime", user.getLastLoginTime());
+            u.put("lastLoginIp", user.getLastLoginIp());
+            // 可根据需要补充更多字段
             list.add(u);
         }
         Map<String, Object> result = new HashMap<>();
         result.put("list", list);
-        result.put("total", list.size());
+        result.put("total", total);
+
+        log.info("查询用户列表，页码：{}，大小：{}，总数：{}", page, size, total);
         return result;
     }
 }

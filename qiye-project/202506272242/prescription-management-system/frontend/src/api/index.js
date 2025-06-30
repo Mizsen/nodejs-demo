@@ -96,4 +96,12 @@ export const authApi = {
   }
 };
 
+// User API
+export const userApi = {
+  getUsers(params) {
+    return apiClient.get('/auth/users', { params });
+  },
+  // 你可以继续扩展如新增、编辑、删除用户等API
+};
+
 export default apiClient;
