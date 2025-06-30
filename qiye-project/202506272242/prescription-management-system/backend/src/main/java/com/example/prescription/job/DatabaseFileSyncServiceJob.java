@@ -50,7 +50,7 @@ public class DatabaseFileSyncServiceJob {
     /**
      * 每5分钟同步一次
      */
-    @Scheduled(fixedRate = 1 * 60 * 1000)
+    // @Scheduled(fixedRate = 1 * 60 * 1000)
     public void syncDatabaseFiles() {
         log.info("定时同步任务开始执行...");
         // closeSlaveConnections(); // 同步前关闭slaveDataSource连接

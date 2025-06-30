@@ -26,7 +26,7 @@ public class DataSourceSwitchAspect {
 
 
         try {
-            DataSourceContextHolder.setDbType(DataSourceContextHolder.DbType.SLAVE);
+            // DataSourceContextHolder.setDbType(DataSourceContextHolder.DbType.SLAVE);
             logger.info("已切换到从库 - {}.{}", className, methodName);
             Object result = joinPoint.proceed();
             logger.info("从库查询完成 - 类: {}, 方法: {}", className, methodName);
