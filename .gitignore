@@ -1,14 +1,9 @@
 # Node.js
 /**/node_modules/
 /**/dist/
-# node_modules/
-# all-dianshang-project/ecommerce-app/backend/node_modules/
-# all-dianshang-project/ecommerce-app/frontend/node_modules/
-# all-dianshang-project/flash-sale-system/node_modules/
-# im-project/socket-node-demo/node_modules/
 
 
-
+# ide
 /**/.idea/
 /.comate/
 /**/.comate/
@@ -19,16 +14,14 @@
 /**/target/
 # qiye-project/202506091014/blog-system/backend/target
 
-
+# 忽略所有目录中的 log 文件夹
 /**/logs/
 /**/log/
-# 忽略所有目录中的 logs 文件夹
-# qiye-project/202506091014/blog-system/backend/logs
 *.log
-# 忽略所有目录中的 log 文件夹
 
 
+# file
 /**/upload/
 
-
+# dir
 /qiye-project/202506091014/blog-system/backend/.idea
