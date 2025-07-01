@@ -1,13 +1,13 @@
 <template>
   <div class="drug-detail">
-    <h1>{{ drug.drug_name }}</h1>
+    <h1>{{ drug.drugName }}</h1>
     <p><strong>规格:</strong> {{ drug.specification }}</p>
     <p><strong>生产厂家:</strong> {{ drug.manufacturer }}</p>
     <p><strong>适应症:</strong> {{ drug.indications }}</p>
     <div class="image-gallery">
       <ImageViewer v-for="image in drugImages" :key="image.id" :src="image.image_path" />
     </div>
-    <router-link to="/drugs" class="back-button">返回药品列表</router-link>
+    <router-link to="/drug/list" class="back-button">返回药品列表</router-link>
   </div>
 </template>
 

@@ -44,6 +44,11 @@ const routes = [
         name: 'DrugList',
         component: () => import('../views/DrugList.vue'),
       },
+      {
+        path: 'drug/detail/:id',
+        name: 'DrugDetail',
+        component: () => import('../views/DrugDetail.vue'),
+      },
       // 你可以继续添加其他子页面
       // { path: 'another/path', name: 'AnotherName', component: ... },
     ],

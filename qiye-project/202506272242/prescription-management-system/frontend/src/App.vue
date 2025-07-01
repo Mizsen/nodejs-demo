@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div v-if="isLoggedIn && $route.path !== '/login' && $route.path !== '/register'" class="topbar">
+    <div class="topbar">
       <div class="topbar-title">药方数据管理系统</div>
     </div>
     <router-view />
@@ -70,17 +70,5 @@ nav a.router-link-exact-active {
   color: #409EFF;
   letter-spacing: 2px;
 }
-.logout-btn {
-  background: #f56c6c;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 18px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.logout-btn:hover {
-  background: #d93026;
-}
+
 </style>
