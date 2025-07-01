@@ -10,7 +10,7 @@
 
 
 /**/.idea/
-.comate/
+/.comate/
 /**/.comate/
 
 # java
@@ -31,3 +31,4 @@
 /**/upload/
 
 
+/qiye-project/202506091014/blog-system/backend/.idea
