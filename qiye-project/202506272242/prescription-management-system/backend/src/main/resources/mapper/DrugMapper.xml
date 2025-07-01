@@ -76,7 +76,7 @@
         SELECT * FROM drug WHERE id = #{id}
     </select>
 
-    <select id="pageQueryDrug" resultType="com.example.prescription.entity.Drug">
+    <select id="pageQueryDrug" resultMap="BaseResultMap" >
         SELECT *
         FROM drug
         <where>

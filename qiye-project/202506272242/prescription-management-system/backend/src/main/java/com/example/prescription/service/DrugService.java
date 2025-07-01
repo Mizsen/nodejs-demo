@@ -4,6 +4,8 @@ import com.example.prescription.entity.Drug;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
+
 
 public interface DrugService {
     boolean saveDrug(Drug drug);
@@ -20,9 +22,10 @@ public interface DrugService {
 
     boolean isDrugNameUnique(String name);
 
-    boolean saveDrugImage(Integer drugId, MultipartFile file, String imageType);
 
     boolean deleteDrugImage(Integer imageId);
 
-    boolean saveDrugImagePath(Integer drugId, String imagePath, String imageType);
+
+
+    Map<String, Object> saveDrugWithImages(Drug drug, MultipartFile[] images);
 }

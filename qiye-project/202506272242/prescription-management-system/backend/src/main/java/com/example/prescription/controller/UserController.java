@@ -63,11 +63,11 @@ public class UserController {
     public Map<String, Object> register(@RequestBody UserRegisterDTO dto, HttpServletRequest request) {
         log.info(RequestLogUtil.printRequestParams(request, dto));
         Map<String, Object> result = new HashMap<>();
-        if (!isPasswordStrong(dto.getPassword())) {
-            result.put("success", false);
-            result.put("msg", "密码强度不足，需包含大小写字母、数字、特殊字符，长度8位以上");
-            return result;
-        }
+        // if (!isPasswordStrong(dto.getPassword())) {
+        //     result.put("success", false);
+        //     result.put("msg", "密码强度不足，需包含大小写字母、数字、特殊字符，长度8位以上");
+        //     return result;
+        // }
         User exist = userService.findByUsername(dto.getUsername());
         if (exist != null) {
             result.put("success", false);

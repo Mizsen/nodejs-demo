@@ -2,13 +2,8 @@
   <div class="admin-layout">
     <el-container style="height: 100vh">
       <el-aside width="220px">
-        <el-menu
-          :default-active="activeMenu"
-          :default-openeds="defaultOpeneds"
-          class="el-menu-vertical-demo"
-          :unique-opened="true"
-          router
-        >
+        <el-menu :default-active="activeMenu" :default-openeds="defaultOpeneds" class="el-menu-vertical-demo"
+          :unique-opened="true" router>
           <el-sub-menu v-for="(group, idx) in menuGroups" :key="idx" :index="String(idx)">
             <template #title>{{ group.title }}</template>
             <el-menu-item v-for="item in group.children" :key="item.path" :index="item.path" @click="go(item.path)">
@@ -20,7 +15,7 @@
       <el-container>
         <el-header style="background:#f5f5f5;display:flex;justify-content:space-between;align-items:center;">
           <span>欢迎，{{ user?.username }}（{{ user?.role }}）</span>
-          <!-- <el-button type="danger" @click="logout" size="small">退出系统</el-button> -->
+          <el-button type="danger" @click="logout" size="small">退出系统</el-button>
         </el-header>
         <el-main>
           <router-view />
@@ -45,11 +40,11 @@ const activeMenu = computed(() => route.path);
 // 菜单映射：根据后端返回的菜单名生成二级菜单
 const menuMap = {
   '药品管理': [
-    { label: '新增药品', path: '/admin/drug/edit' },
+    { label: '新增药品', path: '/admin/drug/add' },
     { label: '药品列表', path: '/admin/drug/list' }
   ],
   '药方管理': [
-    { label: '新增药方', path: '/admin/prescription/edit' },
+    { label: '新增药方', path: '/admin/prescription/add' },
     { label: '药方列表', path: '/admin/prescription/list' }
   ],
   '用户管理': [
@@ -75,11 +70,17 @@ function go(path) {
 }
 
 function logout() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('role');
+  localStorage.removeItem('menu');
+  localStorage.removeItem('username');
   store.dispatch('logout');
   router.push('/login');
 }
 </script>
 
 <style scoped>
-.admin-layout { height: 100vh; }
+.admin-layout {
+  height: 100vh;
+}
 </style>

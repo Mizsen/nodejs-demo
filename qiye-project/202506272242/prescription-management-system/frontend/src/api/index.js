@@ -1,14 +1,5 @@
 import axios from 'axios';
 
-// 请求拦截器：自动带上token
-axios.interceptors.request.use(config => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-}, error => Promise.reject(error));
-
 // 响应拦截器：401自动跳转登录
 axios.interceptors.response.use(
   response => response,
@@ -28,6 +19,15 @@ const apiClient = axios.create({
   },
 });
 
+// 给 apiClient 添加请求拦截器，自动带上token
+apiClient.interceptors.request.use(config => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, error => Promise.reject(error));
+
 // Prescription API
 export const prescriptionApi = {
   createPrescription(data) {
@@ -36,7 +36,7 @@ export const prescriptionApi = {
   getPrescription(id) {
     return apiClient.get(`/prescriptions/${id}`);
   },
-  getPrescriptions(params) {
+  listPrescriptions(params) {
     return apiClient.get('/prescriptions', { params });
   },
   updatePrescription(id, data) {
@@ -65,6 +65,9 @@ export const drugApi = {
   getDrugs(params) {
     return apiClient.get('/drugs', { params });
   },
+  listDrugs(params) {
+    return apiClient.get('/drugs', { params });
+  },
   updateDrug(id, data) {
     return apiClient.put(`/drugs/${id}`, data);
   },
@@ -73,6 +76,16 @@ export const drugApi = {
   },
   uploadDrugImage(id, formData) {
     return apiClient.post(`/drugs/${id}/images`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  },
+  addDrug(data) {
+    return apiClient.post('/drugs', data);
+  },
+  addDrugWithImages(formData) {
+    return apiClient.post('/drugs/with-images', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

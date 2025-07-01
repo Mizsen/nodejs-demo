@@ -34,42 +34,79 @@
 <script>
 import ImageUploader from '@/components/ImageUploader.vue';
 import ImageViewer from '@/components/ImageViewer.vue';
-import { mapGetters } from 'vuex';
+import { useRoute } from 'vue-router';
+import { prescriptionApi, drugApi } from '@/api/index.js';
 
 export default {
   components: {
     ImageUploader,
     ImageViewer,
   },
-  data() {
-    return {
-      prescription: {
-        name: '',
-        indications: '',
-        usage: '',
-        treatmentCycle: '',
-      },
-      selectedDrugs: [],
-      prescriptionImages: [],
-      drugs: [], // This should be populated with drug data from the API
+  setup() {
+    const route = useRoute();
+    const prescription = ref({
+      name: '',
+      indications: '',
+      usage: '',
+      treatmentCycle: '',
+    });
+    const selectedDrugs = ref([]);
+    const prescriptionImages = ref([]);
+    const drugs = ref([]);
+
+    // 拉取药品列表
+    const fetchDrugs = async () => {
+      const res = await drugApi.getAll();
+      drugs.value = res.data;
     };
-  },
-  computed: {
-    ...mapGetters(['getDrugs']),
-  },
-  methods: {
-    submitForm() {
-      // Logic to submit the prescription data to the backend
-    },
-    handleImageUpload(images) {
-      this.prescriptionImages = images;
-    },
-    fetchDrugs() {
-      // Logic to fetch drugs from the API and set this.drugs
-    },
-  },
-  mounted() {
-    this.fetchDrugs();
+
+    // 拉取药方详情
+    const fetchPrescriptionDetail = async () => {
+      const id = route.params.id;
+      if (!id) return;
+      const res = await prescriptionApi.getPrescription(id);
+      const data = res.data;
+      prescription.value = {
+        name: data.prescription_name,
+        indications: data.indications,
+        usage: data.usage,
+        treatmentCycle: data.treatment_cycle,
+      };
+      selectedDrugs.value = data.drugs ? data.drugs.map(d => d.id) : [];
+      prescriptionImages.value = data.images || [];
+    };
+
+    // 提交表单
+    const submitForm = async () => {
+      const id = route.params.id;
+      await prescriptionApi.updatePrescription(id, {
+        prescription_name: prescription.value.name,
+        indications: prescription.value.indications,
+        usage: prescription.value.usage,
+        treatment_cycle: prescription.value.treatmentCycle,
+        drug_ids: selectedDrugs.value,
+        images: prescriptionImages.value,
+      });
+      // 可加提示和跳转
+    };
+
+    const handleImageUpload = (images) => {
+      prescriptionImages.value = images;
+    };
+
+    onMounted(() => {
+      fetchDrugs();
+      fetchPrescriptionDetail();
+    });
+
+    return {
+      prescription,
+      selectedDrugs,
+      prescriptionImages,
+      drugs,
+      submitForm,
+      handleImageUpload,
+    };
   },
 };
 </script>

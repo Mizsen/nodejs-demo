@@ -1,34 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import PrescriptionEdit from '../views/PrescriptionEdit.vue';
-import PrescriptionDetail from '../views/PrescriptionDetail.vue';
-import DrugEdit from '../views/DrugEdit.vue';
-import DrugDetail from '../views/DrugDetail.vue';
 import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
 
 const routes = [
   { path: '/login', name: 'Login', component: Login },
   { path: '/register', name: 'Register', component: Register },
-  {
-    path: '/prescription/edit',
-    name: 'PrescriptionEdit',
-    component: PrescriptionEdit,
-  },
-  {
-    path: '/prescription/:id',
-    name: 'PrescriptionDetail',
-    component: PrescriptionDetail,
-  },
-  {
-    path: '/drug/edit',
-    name: 'DrugEdit',
-    component: DrugEdit,
-  },
-  {
-    path: '/drug/:id',
-    name: 'DrugDetail',
-    component: DrugDetail,
-  },
   {
     path: '/admin',
     component: () => import('../views/Admin.vue'),
@@ -38,10 +14,38 @@ const routes = [
         name: 'UserList',
         component: () => import('../views/UserList.vue'),
       },
-      // 你可以继续添加药品、药方等子页面
-      // { path: 'drug/list', name: 'DrugList', component: ... },
-      // { path: 'prescription/list', name: 'PrescriptionList', component: ... },
-      // ...
+      {
+        path: 'prescription/add',
+        name: 'PrescriptionAdd',
+        component: () => import('../views/PrescriptionAdd.vue'),
+      },
+      {
+        path: 'prescription/edit/:id',
+        name: 'PrescriptionEdit',
+        component: () => import('../views/PrescriptionEdit.vue'),
+      },
+      {
+        path: 'prescription/list',
+        name: 'PrescriptionList',
+        component: () => import('../views/PrescriptionList.vue'),
+      },
+      {
+        path: 'drug/add',
+        name: 'DrugAdd',
+        component: () => import('../views/DrugAdd.vue'),
+      },
+      {
+        path: 'drug/edit/:id',
+        name: 'DrugEdit',
+        component: () => import('../views/DrugEdit.vue'),
+      },
+      {
+        path: 'drug/list',
+        name: 'DrugList',
+        component: () => import('../views/DrugList.vue'),
+      },
+      // 你可以继续添加其他子页面
+      // { path: 'another/path', name: 'AnotherName', component: ... },
     ],
   },
   { path: '/', redirect: '/admin/user/list' },

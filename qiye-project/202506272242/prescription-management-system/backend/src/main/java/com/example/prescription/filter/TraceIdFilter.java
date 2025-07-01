@@ -7,8 +7,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.UUID;
+import org.springframework.core.annotation.Order;
 
 @Component
+@Order(1)
 public class TraceIdFilter implements Filter {
     private static final String TRACE_ID = "traceId";
 

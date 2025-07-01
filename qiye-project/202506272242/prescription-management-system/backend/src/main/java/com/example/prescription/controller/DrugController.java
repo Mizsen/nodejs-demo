@@ -4,6 +4,10 @@ import com.example.prescription.entity.Drug;
 import com.example.prescription.entity.DrugImage;
 import com.example.prescription.service.DrugService;
 import com.example.prescription.service.DrugImageService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,26 +29,18 @@ import java.util.*;
 @RequestMapping("/api/drugs")
 public class DrugController {
 
+    private static final Logger logger = LoggerFactory.getLogger(DrugController.class);
+
     @Autowired
     private DrugService drugService;
 
     @Autowired
     private DrugImageService drugImageService;
 
-    // 新增药品
-    @PostMapping
-    public Map<String, Object> addDrug(@RequestBody Drug drug) {
-        Map<String, Object> result = new HashMap<>();
-        if (!drugService.isDrugNameUnique(drug.getDrugName())) {
-            result.put("success", false);
-            result.put("msg", "药品名称已存在");
-            return result;
-        }
-        boolean ok = drugService.saveDrug(drug);
-        result.put("success", ok);
-        result.put("msg", ok ? "新增成功" : "新增失败");
-        return result;
-    }
+    @Autowired
+    private ObjectMapper objectMapper;
+
+
 
     // 修改药品
     @PutMapping("/{id}")
@@ -119,5 +115,23 @@ public class DrugController {
         result.put("msg", ok ? "删除成功" : "删除失败");
         return result;
     }
+
+    // 一步到位新增药品及图片（multipart/form-data）
+    @PostMapping("/with-images")
+    public Map<String, Object> addDrugWithImages(
+            @RequestPart("drug") String drugJson,
+            @RequestPart(value = "images", required = false) MultipartFile[] images) {
+        logger.info("[addDrugWithImages] drugJson={}", drugJson);
+        try {
+            Drug drug = objectMapper.readValue(drugJson, Drug.class);
+            logger.info("[addDrugWithImages] drugObj={}", drug.getDrugName());
+            return drugService.saveDrugWithImages(drug, images);
+        } catch (Exception e) {
+            logger.error("[addDrugWithImages] 反序列化异常", e);
+            Map<String, Object> result = new HashMap<>();
+            result.put("success", false);
+            result.put("msg", "参数解析失败: " + e.getMessage());
+            return result;
+        }
+    }
 }
-                

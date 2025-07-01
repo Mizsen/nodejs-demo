@@ -1,12 +1,7 @@
 <template>
   <div id="app">
-    <nav v-if="!isLoggedIn">
-      <router-link to="/login">登录</router-link> |
-      <router-link to="/register">注册</router-link>
-    </nav>
-    <div v-else class="topbar">
+    <div v-if="isLoggedIn && $route.path !== '/login' && $route.path !== '/register'" class="topbar">
       <div class="topbar-title">药方数据管理系统</div>
-      <button class="logout-btn" @click="logout">退出系统</button>
     </div>
     <router-view />
   </div>
@@ -17,7 +12,7 @@ export default {
   name: 'App',
   computed: {
     isLoggedIn() {
-      return !!localStorage.getItem('token');
+      return localStorage.getItem('token');
     }
   },
   methods: {

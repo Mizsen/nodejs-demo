@@ -28,8 +28,8 @@
     created_by, updated_time, updated_by
     from prescription
   </select>
-  <!-- 分页查询药方 -->
-  <select id="pageQuery" resultType="com.example.prescription.entity.Prescription">
+  <!-- 分页查询药方（修正resultMap） -->
+  <select id="pageQuery" resultMap="BaseResultMap">
       SELECT *
       FROM prescription
       <where>
@@ -59,7 +59,7 @@
   </select>
 
   <!-- 查询药方详情（包含药品和图片信息，可根据需要扩展resultMap） -->
-  <select id="selectDetailById" parameterType="int" resultType="com.example.prescription.entity.Prescription">
+  <select id="selectDetailById" parameterType="int" resultMap="BaseResultMap">
       SELECT *
       FROM prescription
       WHERE id = #{id}

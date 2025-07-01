@@ -8,13 +8,25 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.Base64;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class JwtUtil {
 
     // 使用安全的密钥生成方式
     private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private static final long EXPIRATION_TIME = 86400000; // 24小时
+
+    static {
+        // 确保密钥长度符合要求
+        if (SECRET_KEY.getEncoded().length < 32) {
+            throw new IllegalStateException("Secret key must be at least 256 bits long");
+        }
+        // 生产环境建议不要输出密钥，仅开发调试用
+         log.info("JWT Secret Key initialized successfully: {}",  Base64.getEncoder().encodeToString(SECRET_KEY.getEncoded()));
+    }   
 
     /**
      * 生成JWT Token
@@ -99,5 +111,16 @@ public class JwtUtil {
             return authorizationHeader.substring(7);
         }
         return null;
+    }
+
+    /**
+     * 解析token，返回Claims
+     */
+    public static Claims parseToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(SECRET_KEY)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }
