@@ -35,15 +35,18 @@ jwt:
   header: Authorization
 
 logging:
+#  config: classpath:logback-produce.xml
   level:
     root: INFO
     com.example.prescription: DEBUG
-    com.example.prescription.mapper: DEBUG
-    org.mybatis: DEBUG
+    # com.example.prescription.mapper: DEBUG
+    # org.mybatis: DEBUG
   pattern:
     console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr([%thread][%X{traceId}]){blue} %clr([%file]){magenta} %clr(%-5level){green} %clr(%logger{36}.%M:%line){cyan} - %msg%n"
-    file:
-      name: ./logs/prescription-app.log
-      pattern: "%d{yyyy-MM-dd HH:mm:ss} [%thread] [%X{traceId}] %caller{1}:%line - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] [%X{traceId}] %caller{1}:%line - %msg%n"
+  file:
+    path: logs
+    name: ${logging.file.path}/prescription-app.log
+
 
 #debug: true

@@ -10,6 +10,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class PrescriptionApplication {
 
     public static void main(String[] args) {
+
+ 
         SpringApplication.run(PrescriptionApplication.class, args);
     }
 }
