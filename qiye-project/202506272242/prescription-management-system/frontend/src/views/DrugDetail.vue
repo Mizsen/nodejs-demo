@@ -5,7 +5,9 @@
     <p><strong>生产厂家:</strong> {{ drug.manufacturer }}</p>
     <p><strong>适应症:</strong> {{ drug.indications }}</p>
     <div class="image-gallery">
-      <ImageViewer v-for="image in drugImages" :key="image.id" :src="image.image_path" />
+      <!-- <ImageViewer :images="drugImages" /> -->
+
+      <SingleImageViewer v-for="image in drugImages" :key="image.id" :src="image.imagePath" />
     </div>
     <router-link to="/drug/list" class="back-button">返回药品列表</router-link>
   </div>
@@ -16,10 +18,12 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { drugApi } from '@/api/index.js'; // Assume this API function is defined
 import ImageViewer from '@/components/ImageViewer.vue';
+import SingleImageViewer from '@/components/SingleImageViewer.vue';       
 
 export default {
   components: {
-    ImageViewer,
+    // ImageViewer,
+    SingleImageViewer,
   },
   setup() {
     const route = useRoute();
@@ -29,8 +33,8 @@ export default {
     const fetchDrugDetail = async () => {
       const drugId = route.params.id;
       const response = await drugApi.getDrugDetail(drugId);
-      drug.value = response.data;
-      drugImages.value = response.data.images; // Assuming images are part of the drug detail response
+      drug.value = response.data.drug;
+      drugImages.value = Array.isArray(response.data.images) ? response.data.images : [];
     };
 
     onMounted(fetchDrugDetail);

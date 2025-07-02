@@ -21,4 +21,6 @@ public interface DrugImageMapper {
     int deleteByDrugId(Integer drugId);
 
     int deleteDrugImageById(Integer id);
+
+    List<DrugImage> selectImagesByDrugId(Integer drugId);
 }

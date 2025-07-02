@@ -17,4 +17,11 @@ public interface PrescriptionImageMapper {
     int updateByPrimaryKey(PrescriptionImage row);
 
     int insertPrescriptionImage(PrescriptionImage prescriptionImage);
+
+    List<PrescriptionImage> selectByPrescriptionId(Integer prescriptionId);
+
+    /**
+     * 批量删除药方关联的图片
+     */
+    int deletePrescriptionImageByPrescriptionIds(List<Integer> ids);
 }

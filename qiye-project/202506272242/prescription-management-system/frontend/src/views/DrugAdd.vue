@@ -35,6 +35,7 @@ import ImageViewer from '@/components/ImageViewer.vue';
 import { drugApi } from '@/api/index.js';
 import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
+import { useRouter } from 'vue-router';
 
 export default {
   components: {
@@ -49,6 +50,7 @@ export default {
       indications: '',
     });
     const drugImages = ref([]);
+    const router = useRouter();
 
     const submitForm = async () => {
       try {
@@ -61,6 +63,10 @@ export default {
         const res = await drugApi.addDrugWithImages(formData);
         if (res.data && res.data.success) {
           ElMessage.success(res.data.msg || '新增药品成功');
+          const drugId = res.data.drugId || res.data.id;
+          if (drugId) {
+            router.push({ name: 'DrugDetail', params: { id: drugId } });
+          }
         } else {
           ElMessage.error(res.data.msg || '新增药品失败');
         }

@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.util.StringUtils;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+
+import com.example.prescription.dto.DrugDetailDTO;
 
 /**
  * <p>
@@ -65,8 +69,13 @@ public class DrugController {
 
     // 查询药品详情
     @GetMapping("/{id}")
-    public Drug getDrug(@PathVariable Integer id) {
-        return drugService.getDrugDetail(id);
+    public DrugDetailDTO getDrug(@PathVariable Integer id) {
+        Drug drug = drugService.getDrugDetail(id);
+        List<DrugImage> images = drugImageService.getImagesByDrugId(id);
+        DrugDetailDTO dto = new DrugDetailDTO();
+        dto.setDrug(drug);
+        dto.setImages(images);
+        return dto;
     }
 
     // 分页查询药品
@@ -120,12 +129,22 @@ public class DrugController {
     @PostMapping("/with-images")
     public Map<String, Object> addDrugWithImages(
             @RequestPart("drug") String drugJson,
-            @RequestPart(value = "images", required = false) MultipartFile[] images) {
+            @RequestPart(value = "images", required = false) MultipartFile[] images,
+            HttpServletRequest request) { // 新增参数
         logger.info("[addDrugWithImages] drugJson={}", drugJson);
         try {
             Drug drug = objectMapper.readValue(drugJson, Drug.class);
             logger.info("[addDrugWithImages] drugObj={}", drug.getDrugName());
-            return drugService.saveDrugWithImages(drug, images);
+            // String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+            // 你可以把 baseUrl 传给 service 层用于拼接图片路径
+
+            Map<String, Object> result = drugService.saveDrugWithImages(drug, images, "");
+            if (result != null && Boolean.TRUE.equals(result.get("success")) && drug.getId() != null) {
+                result.put("drugId", drug.getId());
+            }
+            return result;
+
+
         } catch (Exception e) {
             logger.error("[addDrugWithImages] 反序列化异常", e);
             Map<String, Object> result = new HashMap<>();

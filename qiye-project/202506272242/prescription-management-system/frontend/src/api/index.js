@@ -30,7 +30,7 @@ apiClient.interceptors.request.use(config => {
 
 // Prescription API
 export const prescriptionApi = {
-  createPrescription(data) {
+  addPrescription (data) {
     return apiClient.post('/prescriptions', data);
   },
   getPrescription(id) {
@@ -43,7 +43,9 @@ export const prescriptionApi = {
     return apiClient.put(`/prescriptions/${id}`, data);
   },
   deletePrescription(id) {
-    return apiClient.delete(`/prescriptions/${id}`);
+    // return apiClient.delete(`/prescriptions/${id}`);
+
+    return apiClient.delete('/prescriptions', { data: [id] }) 
   },
   uploadPrescriptionImage(id, formData) {
     return apiClient.post(`/prescriptions/${id}/images`, formData, {
@@ -59,7 +61,7 @@ export const drugApi = {
   createDrug(data) {
     return apiClient.post('/drugs', data);
   },
-  getDrug(id) {
+  getDrugDetail(id) {
     return apiClient.get(`/drugs/${id}`);
   },
   getDrugs(params) {

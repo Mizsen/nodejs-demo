@@ -7,4 +7,5 @@ import java.util.List;
 public interface DrugImageService {
     boolean saveDrugImage(DrugImage drugImage);
     List<String> saveDrugImages(Integer drugId, MultipartFile[] files, String imageType);
+    List<DrugImage> getImagesByDrugId(Integer drugId);
 }

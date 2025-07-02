@@ -72,7 +72,7 @@
         DELETE FROM drug WHERE id = #{id}
     </delete>
 
-    <select id="selectDrugDetailById" parameterType="int" resultType="com.example.prescription.entity.Drug">
+    <select id="selectDrugDetailById" parameterType="int" resultMap="BaseResultMap">
         SELECT * FROM drug WHERE id = #{id}
     </select>
 

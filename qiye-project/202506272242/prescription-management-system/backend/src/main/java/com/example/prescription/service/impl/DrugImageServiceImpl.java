@@ -27,29 +27,39 @@ public class DrugImageServiceImpl implements DrugImageService {
     @Override
     public List<String> saveDrugImages(Integer drugId, MultipartFile[] files, String imageType) {
         List<String> filePaths = new ArrayList<>();
-        String uploadDir = System.getProperty("user.dir") + "/upload/drug";
-        File dir = new File(uploadDir);
-        if (!dir.exists()) dir.mkdirs();
+        // String uploadDir = System.getProperty("user.dir") + "/upload/drug";
+        // File dir = new File(uploadDir);
+        // if (!dir.exists()) dir.mkdirs();
 
-        for (MultipartFile file : files) {
-            if (file.isEmpty()) continue;
-            String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
-            String newFileName = System.currentTimeMillis() + "_" + originalFilename;
-            File dest = new File(dir, newFileName);
-            try {
-                file.transferTo(dest);
-                DrugImage img = new DrugImage();
-                img.setDrugId(drugId);
-                img.setImagePath("/upload/drug/" + newFileName);
-                img.setImageType(imageType);
-                img.setSortOrder(0);
-                if (this.saveDrugImage(img)) {
-                    filePaths.add("/upload/drug/" + newFileName);
-                }
-            } catch (IOException e) {
-                // ignore this file, do not add to filePaths
-            }
-        }
+        // for (MultipartFile file : files) {
+        //     if (file.isEmpty()) continue;
+        //     String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
+        //     String newFileName = System.currentTimeMillis() + "_" + originalFilename;
+        //     File dest = new File(dir, newFileName);
+        //     try {
+        //         file.transferTo(dest);
+        //         DrugImage img = new DrugImage();
+        //         img.setDrugId(drugId);
+        //         String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        //         String imageUrl = baseUrl + "/upload/" + newFileName;
+
+        //         // img.setImagePath("/upload/drug/" + newFileName);
+        //         img.setImagePath(imageUrl);
+        //         img.setImageType(imageType);
+        //         img.setSortOrder(0);
+        //         if (this.saveDrugImage(img)) {
+        //             // filePaths.add("/upload/drug/" + newFileName);
+        //             filePaths.add(imageUrl);
+        //         }
+        //     } catch (IOException e) {
+        //         // ignore this file, do not add to filePaths
+        //     }
+        // }
         return filePaths;
+    }
+
+    @Override
+    public List<DrugImage> getImagesByDrugId(Integer drugId) {
+        return drugImageMapper.selectImagesByDrugId(drugId);
     }
 }

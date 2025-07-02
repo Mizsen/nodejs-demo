@@ -30,6 +30,11 @@ const routes = [
         component: () => import('../views/PrescriptionList.vue'),
       },
       {
+        path: 'prescription/detail/:id',
+        name: 'PrescriptionDetail',
+        component: () => import('../views/PrescriptionDetail.vue'),
+      },
+      {
         path: 'drug/add',
         name: 'DrugAdd',
         component: () => import('../views/DrugAdd.vue'),

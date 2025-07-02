@@ -37,4 +37,16 @@
     select id, prescription_id, image_path, image_type, sort_order, created_time
     from prescription_image
   </select>
+  <select id="selectByPrescriptionId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    SELECT * FROM prescription_image WHERE prescription_id = #{prescriptionId}
+  </select>
+
+  <delete id="deletePrescriptionImageByPrescriptionIds" parameterType="list">
+    DELETE FROM prescription_image WHERE prescription_id IN
+    <foreach collection="list" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </delete>
+
+
 </mapper>

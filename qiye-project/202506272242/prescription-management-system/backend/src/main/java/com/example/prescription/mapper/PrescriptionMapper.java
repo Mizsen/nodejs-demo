@@ -1,26 +1,42 @@
 package com.example.prescription.mapper;
 
 import com.example.prescription.entity.Prescription;
-import org.apache.ibatis.annotations.Mapper;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-@Mapper
 public interface PrescriptionMapper {
-    int deleteByPrimaryKey(Integer id);
+  int deleteByPrimaryKey(Integer id);
 
-    int insert(Prescription row);
+  int insert(Prescription row);
 
-    Prescription selectByPrimaryKey(Integer id);
+  Prescription selectByPrimaryKey(Integer id);
 
-    List<Prescription> selectAll();
+  List<Prescription> selectAll();
 
-    int updateByPrimaryKey(Prescription prescription);
+  int updateByPrimaryKey(Prescription prescription);
 
-    List<Prescription> pageQuery(int offset, int size, String name, String indications);
+  List<Prescription> pageQuery(
+    int offset,
+    int size,
+    String name,
+    String indications
+  );
 
-    int count(String name, String indications);
+  int count(String name, String indications);
 
-    Prescription selectDetailById(Integer id);
+  Prescription selectDetailById(Integer id);
 
-    int deleteCascade(List<Integer> ids);
+
+  /**
+   * 批量删除药方
+   * @param ids 药方ID列表
+   * @return 删除的记录数
+   */
+  int deletePrescriptionByIds(List<Integer> ids);
+
+  /**
+   *
+   */
+  int deletePrescriptionByMap(Map<String, List<Integer>> paramMap);
 }

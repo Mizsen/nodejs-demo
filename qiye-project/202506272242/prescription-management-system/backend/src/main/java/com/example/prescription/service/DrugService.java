@@ -27,5 +27,5 @@ public interface DrugService {
 
 
 
-    Map<String, Object> saveDrugWithImages(Drug drug, MultipartFile[] images);
+    Map<String, Object> saveDrugWithImages(Drug drug, MultipartFile[] images,String baseUrl);
 }

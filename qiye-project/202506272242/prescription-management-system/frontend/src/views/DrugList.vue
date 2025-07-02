@@ -18,7 +18,7 @@
         <template #default="scope">
       
             <el-button size="small" type="primary" @click="viewDrugDetail(scope.row.id)">查看</el-button>
-            <el-button size="small" type="success" @click="editDrug(scope.row.id)">修改</el-button>
+            <el-button size="small" type="success" @click="editDrug(scope.row.id)">编辑</el-button>
             <el-button size="small" type="danger" @click="deleteDrug(scope.row.id)">删除</el-button>
          
         </template>

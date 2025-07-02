@@ -16,8 +16,19 @@
           <el-input v-model="prescription.treatmentCycle" placeholder="如 5 天 / 疗程" />
         </el-form-item>
         <el-form-item label="关联药品">
-          <el-select v-model="selectedDrugs" multiple filterable placeholder="请选择关联药品">
-            <el-option v-for="drug in drugs" :key="drug.id" :label="drug.name" :value="drug.id" />
+          <el-select
+            v-model="selectedDrugs"
+            multiple
+            filterable
+            placeholder="请选择关联药品"
+            :value-key="'id'"
+          >
+            <el-option
+              v-for="drug in drugs"
+              :key="drug.id"
+              :label="drug.drugName"
+              :value="drug"
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="药方图片">
@@ -39,6 +50,8 @@ import ImageUploader from '@/components/ImageUploader.vue';
 import ImageViewer from '@/components/ImageViewer.vue';
 import { prescriptionApi, drugApi } from '@/api/index.js';
 import { ref, onMounted } from 'vue';
+import { ElMessage } from 'element-plus';
+import { useRouter } from 'vue-router';
 
 export default {
   components: {
@@ -55,6 +68,7 @@ export default {
     const selectedDrugs = ref([]);
     const prescriptionImages = ref([]);
     const drugs = ref([]);
+    const router = useRouter();
 
     // 拉取药品列表
     const fetchDrugs = async () => {
@@ -65,15 +79,27 @@ export default {
 
     // 提交表单
     const submitForm = async () => {
-      await prescriptionApi.addPrescription({
-        prescriptionName: prescription.value.name,
-        indications: prescription.value.indications,
-        usage: prescription.value.usage,
-        treatmentCycle: prescription.value.treatmentCycle,
-        drug_ids: selectedDrugs.value,
-        images: prescriptionImages.value,
-      });
-      // 可加提示和跳转
+      try {
+        const formData = new FormData();
+        formData.append('prescription', JSON.stringify(prescription.value));
+        formData.append('drugIds', JSON.stringify(selectedDrugs.value.map(d => d.id ? d.id : d)));
+        prescriptionImages.value.forEach((file) => {
+          formData.append('images', file);
+        });
+        const res = await prescriptionApi.addPrescription(formData);
+        if (res.data && res.data.success) {
+          ElMessage.success(res.data.msg || '新增药方成功');
+          // 跳转到详情页，假设返回的 prescriptionId 字段为新建药方id
+          const prescriptionId = res.data.prescriptionId || res.data.id;
+          if (prescriptionId) {
+            router.push({ name: 'PrescriptionDetail', params: { id: prescriptionId } });
+          }
+        } else {
+          ElMessage.error(res.data.msg || '新增药方失败');
+        }
+      } catch (e) {
+        ElMessage.error('新增药方失败');
+      }
     };
 
     const handleImageUpload = (images) => {

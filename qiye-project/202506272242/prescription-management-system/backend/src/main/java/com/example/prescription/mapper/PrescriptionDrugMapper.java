@@ -13,4 +13,15 @@ public interface PrescriptionDrugMapper {
     List<PrescriptionDrug> selectAll();
 
     int updateByPrimaryKey(PrescriptionDrug row);
+
+    /**
+     * 根据药方ID查询关联药品（返回药品信息列表）
+     */
+    List<java.util.Map<String, Object>> selectDrugsByPrescriptionId(Integer prescriptionId);
+
+    /**
+     * 批量删除药方关联的药品
+     */
+    int deletePrescriptionDrugByPrescriptionIds(List<Integer> ids);
+
 }

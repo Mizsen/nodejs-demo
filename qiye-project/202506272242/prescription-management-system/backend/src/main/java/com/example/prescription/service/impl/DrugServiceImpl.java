@@ -81,7 +81,7 @@ public class DrugServiceImpl implements DrugService {
 
     @Override
     @Transactional
-    public Map<String, Object> saveDrugWithImages(Drug drug, MultipartFile[] images) {
+    public Map<String, Object> saveDrugWithImages(Drug drug, MultipartFile[] images,String baseUrl) {
         Map<String, Object> result = new HashMap<>();
         boolean drugOk = drugMapper.insertDrug(drug) > 0;
         logger.info("[saveDrugWithImages] 保存药品：{}，结果：{}", drug, drugOk);
@@ -106,7 +106,9 @@ public class DrugServiceImpl implements DrugService {
                     logger.info("[saveDrugWithImages] 图片已保存到：{}，原文件名：{}", filePath, file.getOriginalFilename());
                     DrugImage img = new DrugImage();
                     img.setDrugId(drug.getId());
-                    img.setImagePath("/upload/drug_image/" + fileName);
+                    // img.setImagePath("/upload/drug_image/" + fileName);
+                    String imageUrl = baseUrl + "/upload/drug_image/" + fileName;
+                    img.setImagePath(imageUrl);
                     // 获取图片类型（后缀），如 jpg/png/gif
                     String originalFilename = file.getOriginalFilename();
                     String ext = "jpg";
