@@ -20,8 +20,10 @@ spring:
       pool:
         size: 5              # 定时任务线程池大小（默认1）
       thread-name-prefix: sync-  # 线程名前缀
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/public/,classpath:/dist/
 
-      
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml  # 支持多级目录
   type-aliases-package: com.example.prescription.entity  # 实体类包路径

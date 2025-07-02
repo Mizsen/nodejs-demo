@@ -23,8 +23,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll()
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/register","/api/auth/login").permitAll()
                         .requestMatchers("/upload/**").permitAll()
+                        .requestMatchers("/", "/index.html", "/login", "/css/**", "/js/**","/assets/**").permitAll()
                         .requestMatchers("/api/drugs/**").hasAnyRole("pharmacist", "admin")
                         .requestMatchers("/api/prescriptions/**").hasAnyRole("doctor", "admin")
                         .anyRequest().authenticated())
