@@ -8,11 +8,12 @@
 
 # Node.js
 /**/node_modules/
+
+
 # /**/dist/
 
-qiye-project\202506272242\prescription-management-system\frontend\dist
-qiye-project\202506091014\blog-system\frontend\dist
-
+qiye-project/202506091014/blog-system/frontend/dist
+qiye-project/202506272242/prescription-management-system/frontend/dist/
 
 
 
@@ -32,4 +33,5 @@ qiye-project\202506091014\blog-system\frontend\dist
 
 # dir
 /qiye-project/202506091014/blog-system/backend/.idea
+
 
