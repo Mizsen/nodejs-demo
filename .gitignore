@@ -1,6 +1,10 @@
-
-.vscode
-
+# ide
+/.vscode/
+/**/.vscode
+/.comate/
+/**/.comate/
+/**/.idea/
+/.idea/
 
 # Node.js
 /**/node_modules/
@@ -9,10 +13,8 @@
 qiye-project\202506272242\prescription-management-system\frontend\dist
 qiye-project\202506091014\blog-system\frontend\dist
 
-# ide
-/**/.idea/
-/.comate/
-/**/.comate/
+
+
 
 # java
 
@@ -30,3 +32,4 @@ qiye-project\202506091014\blog-system\frontend\dist
 
 # dir
 /qiye-project/202506091014/blog-system/backend/.idea
+
